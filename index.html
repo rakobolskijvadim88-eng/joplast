@@ -2,12 +2,8 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>NEST CLUB — Панель Администрации</title>
-
-  <!-- Telegram WebApp SDK -->
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>NEST CLUB</title>
   <style>
     * {
       box-sizing: border-box;
@@ -15,269 +11,298 @@
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       -webkit-tap-highlight-color: transparent;
-      user-select: none;
     }
 
     body {
-      background-color: #0b0c10;
+      background-color: #000000;
       color: #ffffff;
-      overflow-x: hidden;
-      min-height: 100vh;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      padding: 16px;
       padding-bottom: 90px;
+      max-width: 450px;
+      margin: 0 auto;
+      position: relative;
+      min-height: 100vh;
     }
 
-    /* Фоновый холст со звёздами */
+    /* Фоновый холст для звезд */
     #spaceCanvas {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: -1;
       pointer-events: none;
+      z-index: -1;
     }
 
-    /* Контейнер приложения */
-    .app-container {
-      width: 100%;
-      max-width: 440px;
-      padding: 16px;
-    }
-
-    /* Страницы */
     .page {
       display: none;
-      animation: fadeIn 0.25s ease-in-out forwards;
+      position: relative;
+      z-index: 1;
     }
 
     .page.active {
       display: block;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
     /* Шапка */
     .header {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      margin-bottom: 20px;
+      align-items: center;
+      margin-bottom: 16px;
+      margin-top: 8px;
     }
 
-    .brand {
+    .header-title {
       display: flex;
       align-items: center;
-      gap: 10px;
-    }
-
-    .brand-icon {
-      width: 32px;
-      height: 32px;
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-    }
-
-    .brand-title {
+      gap: 12px;
+      font-size: 22px;
       font-weight: 700;
-      font-size: 18px;
       letter-spacing: 0.5px;
     }
 
+    .logo-frame {
+      width: 40px;
+      height: 40px;
+      border: 1px solid #333333;
+      border-radius: 10px;
+      background-color: rgba(18, 18, 18, 0.8);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+    }
+
+    .logo-icon {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-icon svg {
+      width: 100%;
+      height: 100%;
+    }
+
     .bot-tag {
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.4);
-      background: rgba(255, 255, 255, 0.05);
-      padding: 4px 8px;
-      border-radius: 12px;
+      background-color: rgba(28, 28, 30, 0.8);
+      backdrop-filter: blur(10px);
+      border: 1px solid #2c2c2e;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      color: #e5e5ea;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .bot-tag .logo-small {
+      width: 14px;
+      height: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bot-tag .logo-small svg {
+      width: 100%;
+      height: 100%;
     }
 
     /* Карточки */
     .card {
-      background: rgba(22, 24, 31, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.07);
+      background-color: rgba(18, 18, 18, 0.75);
       backdrop-filter: blur(12px);
-      border-radius: 18px;
-      padding: 18px;
-      margin-bottom: 14px;
-    }
-
-    .card-title {
-      text-align: center;
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: #ffffff;
-      margin-bottom: 4px;
-    }
-
-    .card-subtitle {
-      text-align: center;
-      font-size: 16px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      color: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 16px;
       margin-bottom: 12px;
     }
 
-    /* График юзеров */
-    .stat-box {
+    /* Панель администрации */
+    .admin-card {
+      background: linear-gradient(180deg, rgba(24, 24, 24, 0.85) 0%, rgba(16, 16, 16, 0.85) 100%);
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 10px;
+      justify-content: center;
+      min-height: 100px;
+      text-align: center;
     }
 
-    .stat-num {
-      font-size: 28px;
-      font-weight: 800;
+    .admin-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 1px;
       color: #ffffff;
+      white-space: pre-line;
     }
 
-    .stat-label {
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.5);
+    /* Статистика */
+    .stats-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: #8e8e93;
+      margin-bottom: 12px;
     }
 
-    .wave-container {
-      width: 100%;
-      height: 65px;
-      position: relative;
+    .stats-grid {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
     }
 
-    #waveCanvas {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-
-    /* Новости */
-    .news-box {
+    .stat-box {
+      flex: 1;
+      background: rgba(26, 26, 26, 0.6);
+      border-radius: 12px;
+      padding: 10px;
       display: flex;
       align-items: center;
       gap: 10px;
-      background: rgba(255, 255, 255, 0.03);
-      padding: 10px 12px;
-      border-radius: 12px;
-      font-size: 13px;
     }
 
-    .news-text {
-      color: rgba(255, 255, 255, 0.8);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    .stat-icon {
+      width: 32px;
+      height: 32px;
+      background: #262626;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
     }
 
-    /* Сетка сервисов */
-    .section-label {
-      font-size: 11px;
+    .stat-num {
+      font-size: 18px;
       font-weight: 700;
-      letter-spacing: 1px;
-      color: rgba(255, 255, 255, 0.4);
-      margin: 16px 0 10px 4px;
+      line-height: 1;
+    }
+
+    .stat-desc {
+      font-size: 11px;
+      color: #8e8e93;
+      margin-top: 2px;
+    }
+
+    /* Хост для холста Canvas */
+    .chart-container {
+      width: 100%;
+      height: 65px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .chart-container canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Новости */
+    .news-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+    }
+
+    .news-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .news-icon {
+      width: 36px;
+      height: 36px;
+      background: #222222;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .news-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .news-sub {
+      font-size: 12px;
+      color: #8e8e93;
+    }
+
+    .arrow-right {
+      color: #666666;
+      font-size: 18px;
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: #6e6e73;
+      letter-spacing: 0.5px;
+      margin: 16px 0 8px 4px;
       text-transform: uppercase;
     }
 
-    .grid-2 {
+    .grid-menu {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
 
-    .menu-card {
-      background: rgba(22, 24, 31, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.07);
+    .grid-item {
+      background-color: rgba(18, 18, 18, 0.75);
       backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 16px;
       padding: 16px;
       display: flex;
       flex-direction: column;
       gap: 8px;
       cursor: pointer;
-      transition: transform 0.15s ease, border-color 0.15s ease;
+      transition: background-color 0.2s;
     }
 
-    .menu-card:active {
-      transform: scale(0.97);
-      border-color: rgba(255, 255, 255, 0.2);
+    .grid-item:active {
+      background-color: rgba(26, 26, 26, 0.9);
     }
 
-    .menu-icon {
+    .grid-icon {
       font-size: 20px;
-      margin-bottom: 2px;
-    }
-
-    .menu-title {
-      font-size: 15px;
-      font-weight: 700;
-    }
-
-    .menu-sub {
-      font-size: 11px;
-      color: rgba(255, 255, 255, 0.4);
-    }
-
-    /* Навигационное меню снизу */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      background: rgba(11, 12, 16, 0.9);
-      backdrop-filter: blur(20px);
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 10px 0 16px 0;
-      z-index: 100;
-    }
-
-    .nav-inner {
-      width: 100%;
-      max-width: 440px;
-      display: flex;
-      justify-content: space-around;
-    }
-
-    .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      color: rgba(255, 255, 255, 0.4);
-      font-size: 11px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      transition: color 0.15s ease;
-    }
-
-    .nav-item.active {
       color: #ffffff;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
     }
 
-    .nav-item-icon {
-      font-size: 18px;
+    .grid-item-title {
+      font-size: 15px;
+      font-weight: 600;
     }
 
-    /* Шапка подстраниц */
+    .grid-item-sub {
+      font-size: 12px;
+      color: #8e8e93;
+      line-height: 1.3;
+    }
+
+    /* Подстраницы (Картинки, Кнопки, Тексты) */
     .subpage-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 16px;
+      margin-top: 8px;
     }
 
     .subpage-title-group {
@@ -287,323 +312,655 @@
     }
 
     .back-btn {
-      background: rgba(255, 255, 255, 0.08);
+      background: none;
       border: none;
-      color: #fff;
-      width: 32px;
-      height: 32px;
-      border-radius: 10px;
-      font-size: 18px;
+      color: #ffffff;
+      font-size: 22px;
+      cursor: pointer;
+      padding: 0 4px;
+    }
+
+    .subpage-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .subpage-title-icon {
+      width: 24px;
+      height: 24px;
+      background: #222222;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .page-desc {
+      font-size: 13px;
+      color: #8e8e93;
+      line-height: 1.4;
+      margin-bottom: 20px;
+    }
+
+    .image-slot-card {
+      background-color: rgba(18, 18, 18, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .slot-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .slot-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .badge-changed {
+      background-color: rgba(48, 209, 88, 0.15);
+      color: #30d158;
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-weight: 500;
+    }
+
+    .slot-preview {
+      width: 100%;
+      height: 180px;
+      background-color: #0a0a0a;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      color: #48484a;
+      overflow: hidden;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .slot-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-upload {
+      flex: 1;
+      background-color: #1c1c1e;
+      border: 1px solid #2c2c2e;
+      color: #ffffff;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .btn-reset {
+      width: 48px;
+      background-color: #1c1c1e;
+      border: 1px solid #2c2c2e;
+      color: #ffffff;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
     }
 
-    .subpage-title {
-      font-size: 18px;
-      font-weight: 700;
-    }
-
-    .page-desc {
-      font-size: 13px;
-      color: rgba(255, 255, 255, 0.5);
+    /* Элементы списка кнопок и текстов */
+    .item-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
       margin-bottom: 16px;
     }
 
-    /* Поля ввода и кнопки */
-    .custom-input, .custom-textarea {
-      width: 100%;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+    .list-item-card {
+      background: rgba(26, 26, 26, 0.6);
       border-radius: 12px;
-      padding: 12px;
-      color: #ffffff;
-      font-size: 14px;
-      outline: none;
-      margin-top: 8px;
-      margin-bottom: 12px;
+      padding: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    .custom-input:focus, .custom-textarea:focus {
-      border-color: rgba(255, 255, 255, 0.3);
+    .item-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
 
-    .btn-main {
+    .item-name {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .item-detail {
+      font-size: 12px;
+      color: #8e8e93;
+    }
+
+    .btn-add {
       width: 100%;
-      background: #ffffff;
-      color: #0b0c10;
-      border: none;
+      background-color: #ffffff;
+      color: #000000;
+      padding: 14px;
       border-radius: 12px;
-      padding: 12px;
+      font-size: 15px;
       font-weight: 700;
-      font-size: 14px;
+      border: none;
       cursor: pointer;
-      transition: opacity 0.15s ease;
+      margin-top: 8px;
     }
 
-    .btn-main:active {
-      opacity: 0.8;
+    /* Навигация */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: rgba(10, 10, 10, 0.85);
+      backdrop-filter: blur(15px);
+      border-top: 1px solid rgba(28, 28, 30, 0.8);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0 20px 0;
+      max-width: 450px;
+      margin: 0 auto;
+      z-index: 100;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: #636366;
+      font-size: 10px;
+      text-decoration: none;
+      flex: 1;
+    }
+
+    .nav-item.active {
+      color: #ffffff;
+    }
+
+    .nav-icon {
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .active-indicator {
+      width: 16px;
+      height: 2px;
+      background-color: #ffffff;
+      border-radius: 2px;
+      margin-top: 2px;
     }
   </style>
 </head>
 <body>
 
-  <!-- Анимированный космос -->
+  <!-- Фоновый холст для космоса (звезд) -->
   <canvas id="spaceCanvas"></canvas>
 
-  <div class="app-container">
-
-    <!-- СТРАНИЦА: ОБЗОР (ГЛАВНАЯ) -->
-    <div id="mainPage" class="page active">
-      <div class="header">
-        <div class="brand">
-          <div class="brand-icon">⚙️</div>
-          <div class="brand-title">NEST CLUB</div>
-        </div>
-        <div class="bot-tag">@Nestgiftsbot</div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">Панель</div>
-        <div class="card-subtitle">Администрации</div>
-
-        <div style="margin-top: 14px;">
-          <div class="stat-label">Сегодня</div>
-          <div class="stat-box">
-            <span class="brand-icon" style="width:24px;height:24px;font-size:12px;">👤</span>
-            <div>
-              <div class="stat-num">0</div>
-              <div class="stat-label">Юзеров</div>
-            </div>
-          </div>
-
-          <div class="wave-container">
-            <canvas id="waveCanvas"></canvas>
+  <!-- ГЛАВНАЯ СТРАНИЦА -->
+  <div id="mainPage" class="page active">
+    <!-- Шапка -->
+    <div class="header">
+      <div class="header-title">
+        <div class="logo-frame">
+          <div class="logo-icon">
+            <svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1105.000000 989.000000" preserveAspectRatio="xMidYMid meet">
+              <g transform="translate(0.000000,989.000000) scale(0.100000,-0.100000)" fill="#FFFFFF" stroke="none">
+                <path d="M4463 7528 c-62 -64 -99 -108 -319 -373 -69 -82 -145 -174 -171 -203 -87 -102 -174 -216 -179 -238 -3 -13 6 -44 25 -80 16 -32 59 -119 95 -191 36 -73 77 -151 91 -173 22 -35 91 -90 113 -90 4 0 51 -25 103 -56 51 -31 104 -60 117 -65 12 -5 46 -24 75 -42 28 -18 86 -52 127 -74 41 -22 91 -50 110 -61 19 -12 66 -38 104 -58 39 -20 88 -47 109 -61 22 -14 82 -47 135 -75 52 -28 125 -68 160 -90 36 -22 75 -44 88 -48 13 -5 58 -31 102 -58 94 -58 223 -122 248 -122 21 0 189 84 265 133 30 19 64 37 76 41 13 4 80 41 150 82 70 41 131 74 136 74 5 0 47 23 92 50 46 28 100 57 121 66 21 9 62 31 91 50 29 18 83 49 120 67 38 19 100 55 140 80 39 26 75 47 78 47 4 0 44 22 89 49 44 27 109 63 142 80 71 37 80 46 119 121 16 30 49 94 74 142 25 48 63 119 84 158 20 40 37 82 37 94 0 11 -14 37 -31 56 -16 19 -51 62 -76 95 -26 33 -60 76 -77 96 -17 19 -66 79 -110 132 -43 53 -81 97 -85 99 -3 2 -22 23 -41 48 -18 25 -66 81 -105 125 -39 44 -86 100 -105 125 -91 119 -94 121 -172 68 -35 -23 -86 -60 -114 -83 -29 -22 -93 -69 -144 -105 -50 -36 -130 -92 -176 -125 -46 -33 -123 -87 -170 -120 -47 -33 -112 -80 -145 -105 -63 -47 -169 -124 -230 -166 l-36 -25 -62 43 c-34 24 -77 52 -95 63 -18 11 -50 35 -71 54 -21 18 -61 48 -89 66 -28 18 -74 50 -101 72 -28 22 -59 45 -70 51 -11 6 -54 38 -95 71 -41 33 -78 61 -83 61 -7 0 -63 42 -208 155 -28 22 -68 51 -88 65 -20 14 -50 35 -65 48 -16 12 -32 22 -35 22 -4 0 -34 -28 -68 -62z m314 -813 c40 -25 77 -45 81 -45 4 0 43 -21 87 -46 44 -25 105 -60 135 -76 76 -42 230 -132 320 -188 41 -25 101 -59 133 -75 l58 -29 77 38 c42 21 97 51 121 68 24 16 73 45 110 64 36 19 93 51 126 71 104 63 238 140 305 176 36 19 85 47 110 61 55 32 83 33 103 4 8 -13 34 -43 58 -68 71 -73 129 -147 129 -163 0 -14 -84 -76 -122 -90 -9 -3 -55 -31 -102 -61 -48 -31 -89 -56 -92 -56 -3 0 -42 -24 -87 -54 -45 -29 -102 -64 -127 -76 -25 -12 -75 -42 -111 -66 -37 -24 -70 -44 -74 -44 -4 0 -33 -17 -64 -38 -31 -21 -76 -49 -101 -62 -25 -14 -89 -51 -143 -83 -69 -42 -104 -57 -120 -53 -12 3 -51 24 -86 47 -35 23 -82 50 -105 60 -22 11 -79 44 -126 73 -146 93 -232 146 -310 190 -78 44 -122 70 -275 165 -49 31 -106 64 -125 74 -20 10 -49 28 -65 41 -24 19 -27 27 -20 44 14 28 206 242 218 242 5 0 43 -20 84 -45z"/>
+                <path d="M3384 5693 c-33 -3 -43 -9 -48 -26 -3 -12 -6 -500 -6 -1085 l0 -1062 23 -19 c12 -11 54 -36 92 -56 39 -20 117 -65 175 -100 188 -112 364 -205 372 -197 5 5 10 358 11 785 1 426 5 779 9 783 12 11 63 -14 197 -96 68 -41 142 -85 164 -98 23 -12 48 -28 56 -36 9 -7 32 -22 51 -31 19 -10 85 -50 146 -90 105 -68 143 -91 294 -173 36 -19 110 -66 166 -103 55 -37 113 -73 128 -80 14 -7 29 -24 33 -38 3 -13 7 -356 7 -760 1 -405 5 -744 9 -753 5 -9 54 -36 110 -60 l101 -43 141 0 140 0 85 45 85 46 0 984 0 985 -60 31 c-145 75 -173 90 -230 124 -33 20 -141 78 -240 130 -167 86 -227 120 -528 296 -60 35 -111 64 -114 64 -3 0 -43 23 -88 50 -46 28 -103 60 -127 71 -24 11 -59 30 -79 42 -43 27 -99 60 -244 144 -60 36 -117 69 -125 74 -8 5 -24 13 -35 18 -11 5 -36 20 -55 32 -42 29 -67 41 -140 69 -30 12 -107 47 -170 78 -107 52 -120 57 -190 58 -41 1 -94 0 -116 -3z"/>
+                <path d="M7817 5693 c-4 -3 -53 -10 -110 -14 -151 -12 -321 -77 -537 -206 -122 -72 -249 -144 -295 -166 -22 -11 -77 -41 -123 -68 -45 -27 -86 -49 -90 -49 -5 0 -51 -25 -103 -56 -51 -31 -110 -63 -129 -71 -19 -9 -66 -34 -105 -56 -38 -23 -92 -52 -120 -65 -64 -31 -155 -91 -155 -103 0 -4 30 -31 68 -58 37 -28 72 -54 77 -58 6 -5 35 -27 65 -50 30 -23 95 -85 144 -138 130 -141 112 -136 252 -69 66 31 152 77 192 101 134 81 312 167 322 157 6 -6 10 -300 11 -779 1 -424 4 -776 6 -782 6 -15 35 -17 48 -4 6 5 51 30 100 57 50 26 97 51 105 55 8 4 88 51 178 104 90 52 167 95 171 95 5 0 23 13 40 29 l31 29 0 1070 c0 589 -3 1077 -6 1086 -6 16 -26 21 -37 9z"/>
+              </g>
+            </svg>
           </div>
         </div>
+        NEST CLUB
+      </div>
+      <div class="bot-tag">
+        <span class="logo-small">
+          <svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1105.000000 989.000000" preserveAspectRatio="xMidYMid meet">
+            <g transform="translate(0.000000,989.000000) scale(0.100000,-0.100000)" fill="#FFFFFF" stroke="none">
+              <path d="M4463 7528 c-62 -64 -99 -108 -319 -373 -69 -82 -145 -174 -171 -203 -87 -102 -174 -216 -179 -238 -3 -13 6 -44 25 -80 16 -32 59 -119 95 -191 36 -73 77 -151 91 -173 22 -35 91 -90 113 -90 4 0 51 -25 103 -56 51 -31 104 -60 117 -65 12 -5 46 -24 75 -42 28 -18 86 -52 127 -74 41 -22 91 -50 110 -61 19 -12 66 -38 104 -58 39 -20 88 -47 109 -61 22 -14 82 -47 135 -75 52 -28 125 -68 160 -90 36 -22 75 -44 88 -48 13 -5 58 -31 102 -58 94 -58 223 -122 248 -122 21 0 189 84 265 133 30 19 64 37 76 41 13 4 80 41 150 82 70 41 131 74 136 74 5 0 47 23 92 50 46 28 100 57 121 66 21 9 62 31 91 50 29 18 83 49 120 67 38 19 100 55 140 80 39 26 75 47 78 47 4 0 44 22 89 49 44 27 109 63 142 80 71 37 80 46 119 121 16 30 49 94 74 142 25 48 63 119 84 158 20 40 37 82 37 94 0 11 -14 37 -31 56 -16 19 -51 62 -76 95 -26 33 -60 76 -77 96 -17 19 -66 79 -110 132 -43 53 -81 97 -85 99 -3 2 -22 23 -41 48 -18 25 -66 81 -105 125 -39 44 -86 100 -105 125 -91 119 -94 121 -172 68 -35 -23 -86 -60 -114 -83 -29 -22 -93 -69 -144 -105 -50 -36 -130 -92 -176 -125 -46 -33 -123 -87 -170 -120 -47 -33 -112 -80 -145 -105 -63 -47 -169 -124 -230 -166 l-36 -25 -62 43 c-34 24 -77 52 -95 63 -18 11 -50 35 -71 54 -21 18 -61 48 -89 66 -28 18 -74 50 -101 72 -28 22 -59 45 -70 51 -11 6 -54 38 -95 71 -41 33 -78 61 -83 61 -7 0 -63 42 -208 155 -28 22 -68 51 -88 65 -20 14 -50 35 -65 48 -16 12 -32 22 -35 22 -4 0 -34 -28 -68 -62z m314 -813 c40 -25 77 -45 81 -45 4 0 43 -21 87 -46 44 -25 105 -60 135 -76 76 -42 230 -132 320 -188 41 -25 101 -59 133 -75 l58 -29 77 38 c42 21 97 51 121 68 24 16 73 45 110 64 36 19 93 51 126 71 104 63 238 140 305 176 36 19 85 47 110 61 55 32 83 33 103 4 8 -13 34 -43 58 -68 71 -73 129 -147 129 -163 0 -14 -84 -76 -122 -90 -9 -3 -55 -31 -102 -61 -48 -31 -89 -56 -92 -56 -3 0 -42 -24 -87 -54 -45 -29 -102 -64 -127 -76 -25 -12 -75 -42 -111 -66 -37 -24 -70 -44 -74 -44 -4 0 -33 -17 -64 -38 -31 -21 -76 -49 -101 -62 -25 -14 -89 -51 -143 -83 -69 -42 -104 -57 -120 -53 -12 3 -51 24 -86 47 -35 23 -82 50 -105 60 -22 11 -79 44 -126 73 -146 93 -232 146 -310 190 -78 44 -122 70 -275 165 -49 31 -106 64 -125 74 -20 10 -49 28 -65 41 -24 19 -27 27 -20 44 14 28 206 242 218 242 5 0 43 -20 84 -45z"/>
+              <path d="M3384 5693 c-33 -3 -43 -9 -48 -26 -3 -12 -6 -500 -6 -1085 l0 -1062 23 -19 c12 -11 54 -36 92 -56 39 -20 117 -65 175 -100 188 -112 364 -205 372 -197 5 5 10 358 11 785 1 426 5 779 9 783 12 11 63 -14 197 -96 68 -41 142 -85 164 -98 23 -12 48 -28 56 -36 9 -7 32 -22 51 -31 19 -10 85 -50 146 -90 105 -68 143 -91 294 -173 36 -19 110 -66 166 -103 55 -37 113 -73 128 -80 14 -7 29 -24 33 -38 3 -13 7 -356 7 -760 1 -405 5 -744 9 -753 5 -9 54 -36 110 -60 l101 -43 141 0 140 0 85 45 85 46 0 984 0 985 -60 31 c-145 75 -173 90 -230 124 -33 20 -141 78 -240 130 -167 86 -227 120 -528 296 -60 35 -111 64 -114 64 -3 0 -43 23 -88 50 -46 28 -103 60 -127 71 -24 11 -59 30 -79 42 -43 27 -99 60 -244 144 -60 36 -117 69 -125 74 -8 5 -24 13 -35 18 -11 5 -36 20 -55 32 -42 29 -67 41 -140 69 -30 12 -107 47 -170 78 -107 52 -120 57 -190 58 -41 1 -94 0 -116 -3z"/>
+              <path d="M7817 5693 c-4 -3 -53 -10 -110 -14 -151 -12 -321 -77 -537 -206 -122 -72 -249 -144 -295 -166 -22 -11 -77 -41 -123 -68 -45 -27 -86 -49 -90 -49 -5 0 -51 -25 -103 -56 -51 -31 -110 -63 -129 -71 -19 -9 -66 -34 -105 -56 -38 -23 -92 -52 -120 -65 -64 -31 -155 -91 -155 -103 0 -4 30 -31 68 -58 37 -28 72 -54 77 -58 6 -5 35 -27 65 -50 30 -23 95 -85 144 -138 130 -141 112 -136 252 -69 66 31 152 77 192 101 134 81 312 167 322 157 6 -6 10 -300 11 -779 1 -424 4 -776 6 -782 6 -15 35 -17 48 -4 6 5 51 30 100 57 50 26 97 51 105 55 8 4 88 51 178 104 90 52 167 95 171 95 5 0 23 13 40 29 l31 29 0 1070 c0 589 -3 1077 -6 1086 -6 16 -26 21 -37 9z"/>
+            </g>
+          </svg>
+        </span>
+        @Nestgiftsbot
+      </div>
+    </div>
+
+    <!-- Пустая панель администрации -->
+    <div class="card admin-card">
+      <div class="admin-title">ПАНЕЛЬ
+АДМИНИСТРАЦИИ</div>
+    </div>
+
+    <!-- Карточка статистики -->
+    <div class="card">
+      <div class="stats-header">
+        <span>Сегодня</span>
       </div>
 
-      <div class="card" style="padding: 12px 16px;">
-        <div class="news-box">
-          <span>🗞️</span>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+          </div>
           <div>
-            <div style="font-weight: 700; font-size: 13px;">Новости проекта</div>
-            <div class="news-text">📣 Запустили веб-панель управления!</div>
+            <div class="stat-num">0</div>
+            <div class="stat-desc">Юзеров</div>
           </div>
         </div>
       </div>
 
-      <div class="section-label">Управление ботом</div>
-      <div class="grid-2">
-        <div class="menu-card" onclick="openPage('textsPage')">
-          <div class="menu-icon">💬</div>
-          <div class="menu-title">Тексты</div>
-          <div class="menu-sub">Сообщения бота</div>
-        </div>
-        <div class="menu-card" onclick="openPage('buttonsPage')">
-          <div class="menu-icon">🔲</div>
-          <div class="menu-title">Кнопки</div>
-          <div class="menu-sub">Меню и порядок</div>
-        </div>
-        <div class="menu-card" onclick="openPage('imagesPage')">
-          <div class="menu-icon">🖼️</div>
-          <div class="menu-title">Картинки</div>
-          <div class="menu-sub">Слоты меню</div>
-        </div>
-        <div class="menu-card" onclick="openPage('broadcastPage')">
-          <div class="menu-icon">📢</div>
-          <div class="menu-title">Рассылка</div>
-          <div class="menu-sub">Отправка постов</div>
-        </div>
+      <!-- Интерактивный холст: непрерывная бегущая волна -->
+      <div class="chart-container">
+        <canvas id="waveCanvas"></canvas>
       </div>
     </div>
 
-    <!-- СТРАНИЦА: ТЕКСТЫ -->
-    <div id="textsPage" class="page">
-      <div class="subpage-header">
-        <div class="subpage-title-group">
-          <button class="back-btn" onclick="openPage('mainPage')">&lsaquo;</button>
-          <div class="subpage-title">Тексты</div>
+    <!-- Новости -->
+    <div class="card news-card">
+      <div class="news-left">
+        <div class="news-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2"><path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"></path></svg>
+        </div>
+        <div>
+          <div class="news-title">Новости проекта</div>
+          <div class="news-sub">📣 Запустили веб-панель управления!</div>
         </div>
       </div>
-      <div class="page-desc">Редактирование приветственных и системных сообщений.</div>
-      
-      <div class="card">
-        <label style="font-size: 12px; color: rgba(255,255,255,0.6);">Приветствие (/start):</label>
-        <textarea class="custom-textarea" rows="3" placeholder="Введите текст приветствия..."></textarea>
-        <button class="btn-main" onclick="alert('Текст сохранен!')">Сохранить</button>
-      </div>
+      <div class="arrow-right">&rsaquo;</div>
     </div>
 
-    <!-- СТРАНИЦА: КНОПКИ -->
-    <div id="buttonsPage" class="page">
-      <div class="subpage-header">
-        <div class="subpage-title-group">
-          <button class="back-btn" onclick="openPage('mainPage')">&lsaquo;</button>
-          <div class="subpage-title">Кнопки</div>
+    <!-- Раздел управления -->
+    <div class="section-title">↗ Управление ботом</div>
+
+    <!-- Кнопки управления -->
+    <div class="grid-menu">
+      <div class="grid-item" id="btnTexts">
+        <div class="grid-icon">T</div>
+        <div class="grid-item-title">Тексты</div>
+        <div class="grid-item-sub">Сообщения бота</div>
+      </div>
+
+      <div class="grid-item" id="btnButtons">
+        <div class="grid-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="14" height="7"></rect></svg>
         </div>
+        <div class="grid-item-title">Кнопки</div>
+        <div class="grid-item-sub">Меню и порядок</div>
       </div>
-      <div class="page-desc">Настройка главного меню бота.</div>
-      
-      <div class="card">
-        <div style="font-size: 14px; font-weight: 700; margin-bottom: 8px;">Список кнопок</div>
-        <div style="font-size: 13px; color: rgba(255,255,255,0.5); padding: 12px 0;">Кнопка 1: 🎁 Главная<br>Кнопка 2: ℹ️ О нас</div>
-        <button class="btn-main" onclick="alert('Режим редактирования')">Добавить кнопку</button>
-      </div>
-    </div>
 
-    <!-- СТРАНИЦА: КАРТИНКИ -->
-    <div id="imagesPage" class="page">
-      <div class="subpage-header">
-        <div class="subpage-title-group">
-          <button class="back-btn" onclick="openPage('mainPage')">&lsaquo;</button>
-          <div class="subpage-title">Картинки</div>
+      <div class="grid-item" id="btnImages">
+        <div class="grid-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
         </div>
+        <div class="grid-item-title">Картинки</div>
+        <div class="grid-item-sub">Оформление разделов</div>
       </div>
-      <div class="page-desc">Слоты оформления под кнопки меню.</div>
-      
-      <div class="card">
-        <label style="font-size: 12px; color: rgba(255,255,255,0.6);">Ссылка на обложку меню:</label>
-        <input type="text" class="custom-input" placeholder="https://i.imgur.com/example.png">
-        <button class="btn-main" onclick="alert('Картинка сохранена!')">Сохранить картинку</button>
-      </div>
-    </div>
 
-    <!-- СТРАНИЦА: РАССЫЛКА -->
-    <div id="broadcastPage" class="page">
-      <div class="subpage-header">
-        <div class="subpage-title-group">
-          <button class="back-btn" onclick="openPage('mainPage')">&lsaquo;</button>
-          <div class="subpage-title">Рассылка</div>
+      <div class="grid-item">
+        <div class="grid-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12A10 10 0 0 0 12 2v10z"></path><path d="M12 2A10 10 0 0 0 2 12h10z"></path><path d="M12 12L2 12A10 10 0 0 0 12 22V12z"></path><polygon points="11 6 15 10 11 14 11 6"></polygon></svg>
         </div>
-      </div>
-      <div class="page-desc">Создайте и отправьте сообщение пользователям.</div>
-
-      <div class="card">
-        <label style="font-size: 12px; color: rgba(255,255,255,0.6);">Текст рассылки:</label>
-        <textarea class="custom-textarea" rows="4" placeholder="Введите текст рассылки..."></textarea>
-        <button class="btn-main" onclick="alert('Рассылка запущена!')">Отправить рассылку</button>
+        <div class="grid-item-title">Рассылка</div>
+        <div class="grid-item-sub">Пост, кнопки, расписание</div>
       </div>
     </div>
-
   </div>
 
-  <!-- НИЖНЯЯ НАВИГАЦИЯ -->
+  <!-- СТРАНИЦА КАРТИНКИ -->
+  <div id="imagesPage" class="page">
+    <div class="subpage-header">
+      <div class="subpage-title-group">
+        <button class="back-btn btn-to-main">&lsaquo;</button>
+        <div class="subpage-title">
+          <div class="subpage-title-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+          </div>
+          Картинки
+        </div>
+      </div>
+    </div>
+
+    <div class="page-desc">
+      JPG, PNG или WebP до 5 МБ. Слоты фиксированные — картинка заменяет стандартную в соответствующем разделе бота.
+    </div>
+
+    <!-- Слот 1: Главное меню -->
+    <div class="image-slot-card">
+      <div class="slot-header">
+        <div class="slot-title">Главное меню</div>
+        <div class="badge-changed" id="badge1" style="display:none;">изменена</div>
+      </div>
+      <div class="slot-preview" id="preview1">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="2" y1="2" x2="22" y2="22"></line><path d="M10.41 10.41a2 2 0 1 0 2.83 2.83"></path><line x1="13.5" y1="13.5" x2="6" y2="21"></line><path d="M18 12c0 3-3 6-6 6"></path><path d="M3.6 3.6A9 9 0 0 0 21 12"></path></svg>
+      </div>
+      <div class="slot-actions">
+        <input type="file" accept="image/*" id="fileInput1" style="display:none;">
+        <button class="btn-upload" onclick="document.getElementById('fileInput1').click()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          Загрузить свою
+        </button>
+        <button class="btn-reset" onclick="resetSlot('preview1', 'badge1')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6"></path><path d="M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Слот 2: Уведомления -->
+    <div class="image-slot-card">
+      <div class="slot-header">
+        <div class="slot-title">Уведомления</div>
+        <div class="badge-changed" id="badge2" style="display:none;">изменена</div>
+      </div>
+      <div class="slot-preview" id="preview2">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="2" y1="2" x2="22" y2="22"></line><path d="M10.41 10.41a2 2 0 1 0 2.83 2.83"></path><line x1="13.5" y1="13.5" x2="6" y2="21"></line><path d="M18 12c0 3-3 6-6 6"></path><path d="M3.6 3.6A9 9 0 0 0 21 12"></path></svg>
+      </div>
+      <div class="slot-actions">
+        <input type="file" accept="image/*" id="fileInput2" style="display:none;">
+        <button class="btn-upload" onclick="document.getElementById('fileInput2').click()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          Загрузить свою
+        </button>
+        <button class="btn-reset" onclick="resetSlot('preview2', 'badge2')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6"></path><path d="M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- СТРАНИЦА КНОПКИ -->
+  <div id="buttonsPage" class="page">
+    <div class="subpage-header">
+      <div class="subpage-title-group">
+        <button class="back-btn btn-to-main">&lsaquo;</button>
+        <div class="subpage-title">
+          <div class="subpage-title-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          </div>
+          Кнопки
+        </div>
+      </div>
+    </div>
+
+    <div class="page-desc">
+      Настройка главного меню бота. Вы можете добавлять, скрывать и изменять порядок системных кнопок.
+    </div>
+
+    <div class="card">
+      <div class="slot-title" style="margin-bottom: 12px;">Список кнопок</div>
+      <div class="item-list">
+        <div class="list-item-card">
+          <div class="item-info">
+            <div class="item-name">🎁 Главная</div>
+            <div class="item-detail">Кнопка 1 • Активна</div>
+          </div>
+        </div>
+        <div class="list-item-card">
+          <div class="item-info">
+            <div class="item-name">ℹ️ О нас</div>
+            <div class="item-detail">Кнопка 2 • Активна</div>
+          </div>
+        </div>
+      </div>
+      <button class="btn-add">Добавить кнопку</button>
+    </div>
+  </div>
+
+  <!-- СТРАНИЦА ТЕКСТЫ -->
+  <div id="textsPage" class="page">
+    <div class="subpage-header">
+      <div class="subpage-title-group">
+        <button class="back-btn btn-to-main">&lsaquo;</button>
+        <div class="subpage-title">
+          <div class="subpage-title-icon">T</div>
+          Тексты
+        </div>
+      </div>
+    </div>
+
+    <div class="page-desc">
+      Управление стандартными ответами и текстами уведомлений бота.
+    </div>
+
+    <div class="card">
+      <div class="slot-title" style="margin-bottom: 12px;">Шаблоны сообщений</div>
+      <div class="item-list">
+        <div class="list-item-card">
+          <div class="item-info">
+            <div class="item-name">Приветствие /start</div>
+            <div class="item-detail">Добро пожаловать в NEST CLUB!</div>
+          </div>
+        </div>
+        <div class="list-item-card">
+          <div class="item-info">
+            <div class="item-name">Раздел «О нас»</div>
+            <div class="item-detail">NEST CLUB — сервис автоматизации...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Навигация снизу -->
   <div class="bottom-nav">
-    <div class="nav-inner">
-      <button class="nav-item active" onclick="openPage('mainPage')">
-        <span class="nav-item-icon">🔲</span>
-        <span>Обзор</span>
-      </button>
-      <button class="nav-item" onclick="openPage('broadcastPage')">
-        <span class="nav-item-icon">📊</span>
-        <span>Рассылка</span>
-      </button>
-      <button class="nav-item" onclick="openPage('textsPage')">
-        <span class="nav-item-icon">👤</span>
-        <span>Админ</span>
-      </button>
-    </div>
+    <a href="#" class="nav-item active">
+      <div class="nav-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+      </div>
+      <span>Обзор</span>
+      <div class="active-indicator"></div>
+    </a>
+    <a href="#" class="nav-item">
+      <div class="nav-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+      </div>
+      <span>Статистика</span>
+    </a>
+    <a href="#" class="nav-item">
+      <div class="nav-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+      </div>
+      <span>Админ</span>
+    </a>
   </div>
 
+  <!-- Скрипты взаимодействия -->
   <script>
-    // --- ИНИЦИАЛИЗА TELEGRAM WEBAPP ---
-    if (window.Telegram && window.Telegram.WebApp) {
-      window.Telegram.WebApp.ready();
-      window.Telegram.WebApp.expand();
-    }
-
-    // --- ПЕРЕКЛЮЧЕНИЕ СТРАНИЦ ---
-    function openPage(pageId) {
-      document.querySelectorAll('.page').forEach(page => {
-        page.classList.remove('active');
-      });
-      const targetPage = document.getElementById(pageId);
-      if (targetPage) {
-        targetPage.classList.add('active');
-      }
-
-      // Обновление навигации
-      document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
-      if (pageId === 'mainPage') document.querySelectorAll('.nav-item')[0].classList.add('active');
-      if (pageId === 'broadcastPage') document.querySelectorAll('.nav-item')[1].classList.add('active');
-      if (pageId === 'textsPage') document.querySelectorAll('.nav-item')[2].classList.add('active');
-    }
-
-    // --- АНИМАЦИЯ ЗВЕЗДНОГО НЕБА ---
+    /* 1. РЕНДЕР КОСМОСА (Оригинальная физика частиц) */
     const spaceCanvas = document.getElementById('spaceCanvas');
     const spaceCtx = spaceCanvas.getContext('2d');
+    let spaceWidth, spaceHeight;
     let stars = [];
-    let sWidth = 0, sHeight = 0;
+    const numStars = 65;
+
+    function createStar() {
+      return {
+        x: Math.random() * spaceWidth,
+        y: Math.random() * spaceHeight,
+        vx: (Math.random() - 0.5) * 0.15,
+        vy: (Math.random() - 0.5) * 0.15,
+        size: Math.random() * 1.8 + 0.4,
+        alpha: 0,
+        maxAlpha: Math.random() * 0.5 + 0.3,
+        lifeTimer: 0,
+        maxLife: Math.random() * 200 + 100
+      };
+    }
 
     function initSpace() {
-      sWidth = spaceCanvas.width = window.innerWidth || 420;
-      sHeight = spaceCanvas.height = window.innerHeight || 800;
+      spaceWidth = spaceCanvas.width = window.innerWidth;
+      spaceHeight = spaceCanvas.height = window.innerHeight;
       stars = [];
-      for (let i = 0; i < 60; i++) {
-        stars.push({
-          x: Math.random() * sWidth,
-          y: Math.random() * sHeight,
-          size: Math.random() * 1.5 + 0.5,
-          alpha: Math.random(),
-          speed: Math.random() * 0.02 + 0.005
-        });
+      for (let i = 0; i < numStars; i++) {
+        let star = createStar();
+        star.alpha = Math.random() * star.maxAlpha;
+        stars.push(star);
       }
     }
 
-    function drawSpace() {
-      spaceCtx.clearRect(0, 0, sWidth, sHeight);
-      stars.forEach(star => {
-        star.alpha += star.speed;
-        if (star.alpha > 1 || star.alpha < 0) star.speed = -star.speed;
-        spaceCtx.fillStyle = `rgba(255, 255, 255, ${Math.abs(star.alpha)})`;
+    window.addEventListener('resize', initSpace);
+    initSpace();
+
+    function animateSpace() {
+      spaceCtx.clearRect(0, 0, spaceWidth, spaceHeight);
+
+      stars.forEach((star, index) => {
+        star.x += star.vx;
+        star.y += star.vy;
+        star.lifeTimer++;
+
+        if (star.lifeTimer < 50) {
+          star.alpha += (star.maxAlpha / 50);
+        } else if (star.lifeTimer > star.maxLife - 50) {
+          star.alpha -= (star.maxAlpha / 50);
+        }
+
+        if (star.lifeTimer >= star.maxLife || star.x < 0 || star.x > spaceWidth || star.y < 0 || star.y > spaceHeight) {
+          stars[index] = createStar();
+        }
+
+        spaceCtx.fillStyle = `rgba(255, 255, 255, ${Math.max(0, Math.min(1, star.alpha))})`;
         spaceCtx.beginPath();
         spaceCtx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
         spaceCtx.fill();
       });
-      requestAnimationFrame(drawSpace);
-    }
 
-    // --- АНИМАЦИЯ ВОЛНЫ ГРАФИКА ---
-    const waveCanvas = document.getElementById('waveCanvas');
-    const waveCtx = waveCanvas.getContext('2d');
-    let wWidth = 0, wHeight = 0, step = 0;
+      requestAnimationFrame(animateSpace);
+    }
+    animateSpace();
+
+    /* 2. РЕНДЕР ГРАФИКА (Плавная бегущая волна) */
+    const canvas = document.getElementById('waveCanvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let offset = 0;
 
     function resizeWave() {
-      const parent = waveCanvas.parentElement;
-      wWidth = waveCanvas.width = (parent && parent.clientWidth > 0) ? parent.clientWidth : 350;
-      wHeight = waveCanvas.height = (parent && parent.clientHeight > 0) ? parent.clientHeight : 65;
+      width = canvas.width = canvas.parentElement.clientWidth;
+      height = canvas.height = canvas.parentElement.clientHeight;
     }
+    window.addEventListener('resize', resizeWave);
+    resizeWave();
 
-    function drawWave() {
-      waveCtx.clearRect(0, 0, wWidth, wHeight);
-      waveCtx.beginPath();
-      waveCtx.moveTo(0, wHeight / 2);
+    function animateWave() {
+      ctx.clearRect(0, 0, width, height);
+      offset += 1.2;
 
-      for (let x = 0; x < wWidth; x++) {
-        const y = Math.sin((x + step) * 0.03) * 12 + (wHeight / 2);
-        waveCtx.lineTo(x, y);
+      ctx.beginPath();
+      ctx.moveTo(0, height);
+      for (let x = 0; x <= width; x++) {
+        const y = height / 2 
+          + Math.sin((x + offset) * 0.015) * 12 
+          + Math.sin((x - offset * 0.5) * 0.03) * 8
+          + Math.cos((x + offset * 0.8) * 0.01) * 6;
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
       }
+      ctx.lineTo(width, height);
+      ctx.lineTo(0, height);
+      ctx.closePath();
 
-      waveCtx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
-      waveCtx.lineWidth = 2;
-      waveCtx.stroke();
+      const gradient = ctx.createLinearGradient(0, 0, 0, height);
+      gradient.addColorStop(0, 'rgba(255, 255, 255, 0.25)');
+      gradient.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
+      ctx.fillStyle = gradient;
+      ctx.fill();
 
-      step += 1.5;
-      requestAnimationFrame(drawWave);
+      ctx.beginPath();
+      for (let x = 0; x <= width; x++) {
+        const y = height / 2 
+          + Math.sin((x + offset) * 0.015) * 12 
+          + Math.sin((x - offset * 0.5) * 0.03) * 8
+          + Math.cos((x + offset * 0.8) * 0.01) * 6;
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      requestAnimationFrame(animateWave);
+    }
+    animateWave();
+
+    /* 3. НАВИГАЦИЯ МЕЖДУ СТРАНИЦАМИ */
+    const pages = {
+      main: document.getElementById('mainPage'),
+      images: document.getElementById('imagesPage'),
+      buttons: document.getElementById('buttonsPage'),
+      texts: document.getElementById('textsPage')
+    };
+
+    function showPage(targetPage) {
+      Object.values(pages).forEach(p => p.classList.remove('active'));
+      targetPage.classList.add('active');
+      window.scrollTo(0, 0);
     }
 
-    window.addEventListener('resize', () => {
-      initSpace();
-      resizeWave();
+    document.getElementById('btnImages').addEventListener('click', () => showPage(pages.images));
+    document.getElementById('btnButtons').addEventListener('click', () => showPage(pages.buttons));
+    document.getElementById('btnTexts').addEventListener('click', () => showPage(pages.texts));
+
+    document.querySelectorAll('.btn-to-main').forEach(btn => {
+      btn.addEventListener('click', () => showPage(pages.main));
     });
 
-    // Запуск анимаций
-    initSpace();
-    drawSpace();
-    resizeWave();
-    drawWave();
+    /* 4. ПРЯМАЯ ЗАГРУЗКА ИЗ ГАЛЕРЕИ */
+    function setupFileUpload(inputId, previewId, badgeId) {
+      document.getElementById(inputId).addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(event) {
+            const preview = document.getElementById(previewId);
+            preview.style.backgroundImage = `url('${event.target.result}')`;
+            preview.innerHTML = '';
+            document.getElementById(badgeId).style.display = 'block';
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+
+    setupFileUpload('fileInput1', 'preview1', 'badge1');
+    setupFileUpload('fileInput2', 'preview2', 'badge2');
+
+    function resetSlot(previewId, badgeId) {
+      const preview = document.getElementById(previewId);
+      preview.style.backgroundImage = 'none';
+      preview.innerHTML = `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="2" y1="2" x2="22" y2="22"></line><path d="M10.41 10.41a2 2 0 1 0 2.83 2.83"></path><line x1="13.5" y1="13.5" x2="6" y2="21"></line><path d="M18 12c0 3-3 6-6 6"></path><path d="M3.6 3.6A9 9 0 0 0 21 12"></path></svg>`;
+      document.getElementById(badgeId).style.display = 'none';
+    }
   </script>
 </body>
 </html>
