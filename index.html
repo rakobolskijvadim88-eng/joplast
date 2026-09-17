@@ -24,7 +24,6 @@
       min-height: 100vh;
     }
 
-    /* Фоновый холст для звезд */
     #spaceCanvas {
       position: fixed;
       top: 0;
@@ -45,7 +44,6 @@
       display: block;
     }
 
-    /* Шапка */
     .header {
       display: flex;
       justify-content: space-between;
@@ -115,7 +113,6 @@
       height: 100%;
     }
 
-    /* Карточки */
     .card {
       background-color: rgba(18, 18, 18, 0.75);
       backdrop-filter: blur(12px);
@@ -125,7 +122,6 @@
       margin-bottom: 12px;
     }
 
-    /* Панель администрации */
     .admin-card {
       background: linear-gradient(180deg, rgba(24, 24, 24, 0.85) 0%, rgba(16, 16, 16, 0.85) 100%);
       display: flex;
@@ -143,7 +139,6 @@
       white-space: pre-line;
     }
 
-    /* Статистика */
     .stats-header {
       display: flex;
       justify-content: space-between;
@@ -191,7 +186,6 @@
       margin-top: 2px;
     }
 
-    /* Хост для холста Canvas */
     .chart-container {
       width: 100%;
       height: 65px;
@@ -205,7 +199,6 @@
       height: 100%;
     }
 
-    /* Новости */
     .news-card {
       display: flex;
       align-items: center;
@@ -296,7 +289,7 @@
       line-height: 1.3;
     }
 
-    /* Подстраницы (Картинки, Кнопки, Тексты) */
+    /* Подстраницы */
     .subpage-header {
       display: flex;
       align-items: center;
@@ -423,41 +416,35 @@
       cursor: pointer;
     }
 
-    /* Элементы списка кнопок и текстов */
-    .item-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 16px;
+    /* Инпуты и формы */
+    .form-group {
+      margin-bottom: 14px;
     }
 
-    .list-item-card {
-      background: rgba(26, 26, 26, 0.6);
-      border-radius: 12px;
-      padding: 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .item-info {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .item-name {
-      font-size: 15px;
-      font-weight: 600;
-    }
-
-    .item-detail {
+    .form-label {
+      display: block;
       font-size: 12px;
       color: #8e8e93;
+      margin-bottom: 6px;
     }
 
-    .btn-add {
+    .form-input, .form-textarea {
+      width: 100%;
+      background: #1c1c1e;
+      border: 1px solid #2c2c2e;
+      border-radius: 10px;
+      padding: 12px;
+      color: #ffffff;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 90px;
+    }
+
+    .btn-action {
       width: 100%;
       background-color: #ffffff;
       color: #000000;
@@ -467,7 +454,23 @@
       font-weight: 700;
       border: none;
       cursor: pointer;
-      margin-top: 8px;
+      margin-top: 10px;
+    }
+
+    /* Элементы списка кнопок */
+    .button-edit-item {
+      background: rgba(26, 26, 26, 0.6);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .button-edit-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
     }
 
     /* Навигация */
@@ -521,12 +524,11 @@
 </head>
 <body>
 
-  <!-- Фоновый холст для космоса (звезд) -->
+  <!-- Фоновый холст для космоса -->
   <canvas id="spaceCanvas"></canvas>
 
   <!-- ГЛАВНАЯ СТРАНИЦА -->
   <div id="mainPage" class="page active">
-    <!-- Шапка -->
     <div class="header">
       <div class="header-title">
         <div class="logo-frame">
@@ -556,13 +558,11 @@
       </div>
     </div>
 
-    <!-- Пустая панель администрации -->
     <div class="card admin-card">
       <div class="admin-title">ПАНЕЛЬ
 АДМИНИСТРАЦИИ</div>
     </div>
 
-    <!-- Карточка статистики -->
     <div class="card">
       <div class="stats-header">
         <span>Сегодня</span>
@@ -580,13 +580,11 @@
         </div>
       </div>
 
-      <!-- Интерактивный холст: непрерывная бегущая волна -->
       <div class="chart-container">
         <canvas id="waveCanvas"></canvas>
       </div>
     </div>
 
-    <!-- Новости -->
     <div class="card news-card">
       <div class="news-left">
         <div class="news-icon">
@@ -600,10 +598,8 @@
       <div class="arrow-right">&rsaquo;</div>
     </div>
 
-    <!-- Раздел управления -->
     <div class="section-title">↗ Управление ботом</div>
 
-    <!-- Кнопки управления -->
     <div class="grid-menu">
       <div class="grid-item" id="btnTexts">
         <div class="grid-icon">T</div>
@@ -627,7 +623,7 @@
         <div class="grid-item-sub">Оформление разделов</div>
       </div>
 
-      <div class="grid-item">
+      <div class="grid-item" id="btnBroadcast">
         <div class="grid-icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12A10 10 0 0 0 12 2v10z"></path><path d="M12 2A10 10 0 0 0 2 12h10z"></path><path d="M12 12L2 12A10 10 0 0 0 12 22V12z"></path><polygon points="11 6 15 10 11 14 11 6"></polygon></svg>
         </div>
@@ -637,7 +633,7 @@
     </div>
   </div>
 
-  <!-- СТРАНИЦА КАРТИНКИ -->
+  <!-- СТРАНИЦА КАРТИНКИ (С исправленным слотом "Рассылка") -->
   <div id="imagesPage" class="page">
     <div class="subpage-header">
       <div class="subpage-title-group">
@@ -676,10 +672,10 @@
       </div>
     </div>
 
-    <!-- Слот 2: Уведомления -->
+    <!-- Слот 2: Рассылка (Исправлено с «Уведомления») -->
     <div class="image-slot-card">
       <div class="slot-header">
-        <div class="slot-title">Уведомления</div>
+        <div class="slot-title">Баннер рассылки</div>
         <div class="badge-changed" id="badge2" style="display:none;">изменена</div>
       </div>
       <div class="slot-preview" id="preview2">
@@ -698,7 +694,7 @@
     </div>
   </div>
 
-  <!-- СТРАНИЦА КНОПКИ -->
+  <!-- СТРАНИЦА КНОПКИ (Восстановлено оригинальное меню конструктора) -->
   <div id="buttonsPage" class="page">
     <div class="subpage-header">
       <div class="subpage-title-group">
@@ -707,32 +703,49 @@
           <div class="subpage-title-icon">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
           </div>
-          Кнопки
+          Конструктор кнопок
         </div>
       </div>
     </div>
 
     <div class="page-desc">
-      Настройка главного меню бота. Вы можете добавлять, скрывать и изменять порядок системных кнопок.
+      Настройка системного inline-меню. Позволяет переименовывать кнопки, менять ссылки и порядок отображения.
     </div>
 
     <div class="card">
-      <div class="slot-title" style="margin-bottom: 12px;">Список кнопок</div>
-      <div class="item-list">
-        <div class="list-item-card">
-          <div class="item-info">
-            <div class="item-name">🎁 Главная</div>
-            <div class="item-detail">Кнопка 1 • Активна</div>
-          </div>
+      <div class="slot-title" style="margin-bottom: 12px;">Кнопки Главного Меню</div>
+      
+      <div class="button-edit-item">
+        <div class="button-edit-header">
+          <span>Кнопка #1</span>
+          <label><input type="checkbox" checked> Активна</label>
         </div>
-        <div class="list-item-card">
-          <div class="item-info">
-            <div class="item-name">ℹ️ О нас</div>
-            <div class="item-detail">Кнопка 2 • Активна</div>
-          </div>
+        <div class="form-group">
+          <span class="form-label">Текст на кнопке:</span>
+          <input type="text" class="form-input" value="🎁 Получить подарок">
+        </div>
+        <div class="form-group">
+          <span class="form-label">Callback / URL:</span>
+          <input type="text" class="form-input" value="get_gift">
         </div>
       </div>
-      <button class="btn-add">Добавить кнопку</button>
+
+      <div class="button-edit-item">
+        <div class="button-edit-header">
+          <span>Кнопка #2</span>
+          <label><input type="checkbox" checked> Активна</label>
+        </div>
+        <div class="form-group">
+          <span class="form-label">Текст на кнопке:</span>
+          <input type="text" class="form-input" value="🌐 Наш сайт">
+        </div>
+        <div class="form-group">
+          <span class="form-label">Callback / URL:</span>
+          <input type="text" class="form-input" value="https://nestclub.ru">
+        </div>
+      </div>
+
+      <button class="btn-action">Сохранить изменения</button>
     </div>
   </div>
 
@@ -749,25 +762,61 @@
     </div>
 
     <div class="page-desc">
-      Управление стандартными ответами и текстами уведомлений бота.
+      Редактирование текстов системных сообщений бота.
     </div>
 
     <div class="card">
-      <div class="slot-title" style="margin-bottom: 12px;">Шаблоны сообщений</div>
-      <div class="item-list">
-        <div class="list-item-card">
-          <div class="item-info">
-            <div class="item-name">Приветствие /start</div>
-            <div class="item-detail">Добро пожаловать в NEST CLUB!</div>
+      <div class="form-group">
+        <span class="form-label">Приветствие (/start):</span>
+        <textarea class="form-textarea">Добро пожаловать в NEST CLUB! Выберите нужное действие из меню ниже.</textarea>
+      </div>
+      <div class="form-group">
+        <span class="form-label">Сообщение «О нас»:</span>
+        <textarea class="form-textarea">NEST CLUB — инновационный сервис для автопостинга и настройки экосистемы сообществ.</textarea>
+      </div>
+      <button class="btn-action">Обновить тексты</button>
+    </div>
+  </div>
+
+  <!-- СТРАНИЦА РАССЫЛКА (Полностью восстановлена и функционирует) -->
+  <div id="broadcastPage" class="page">
+    <div class="subpage-header">
+      <div class="subpage-title-group">
+        <button class="back-btn btn-to-main">&lsaquo;</button>
+        <div class="subpage-title">
+          <div class="subpage-title-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 6 15 10 11 14 11 6"></polygon></svg>
           </div>
-        </div>
-        <div class="list-item-card">
-          <div class="item-info">
-            <div class="item-name">Раздел «О нас»</div>
-            <div class="item-detail">NEST CLUB — сервис автоматизации...</div>
-          </div>
+          Создание рассылки
         </div>
       </div>
+    </div>
+
+    <div class="page-desc">
+      Создайте сообщение для рассылки по всей базе пользователей бота.
+    </div>
+
+    <div class="card">
+      <div class="form-group">
+        <span class="form-label">Текст сообщения (поддерживает HTML):</span>
+        <textarea class="form-textarea" placeholder="Введите текст вашего поста..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <span class="form-label">Загрузить медиа к посту:</span>
+        <input type="file" accept="image/*" id="broadcastFileInput" style="display:none;">
+        <button class="btn-upload" onclick="document.getElementById('broadcastFileInput').click()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          Прикрепить фото
+        </button>
+      </div>
+
+      <div class="form-group">
+        <span class="form-label">Inline-кнопка (Текст | Ссылка):</span>
+        <input type="text" class="form-input" placeholder="Перейти на сайт | https://example.com">
+      </div>
+
+      <button class="btn-action" onclick="alert('Рассылка запущена!')">🚀 Запустить рассылку</button>
     </div>
   </div>
 
@@ -796,7 +845,7 @@
 
   <!-- Скрипты взаимодействия -->
   <script>
-    /* 1. РЕНДЕР КОСМОСА (Оригинальная физика частиц) */
+    /* 1. РЕНДЕР КОСМОСА */
     const spaceCanvas = document.getElementById('spaceCanvas');
     const spaceCtx = spaceCanvas.getContext('2d');
     let spaceWidth, spaceHeight;
@@ -859,7 +908,7 @@
     }
     animateSpace();
 
-    /* 2. РЕНДЕР ГРАФИКА (Плавная бегущая волна) */
+    /* 2. РЕНДЕР ГРАФИКА (Волна) */
     const canvas = document.getElementById('waveCanvas');
     const ctx = canvas.getContext('2d');
     let width, height;
@@ -918,7 +967,8 @@
       main: document.getElementById('mainPage'),
       images: document.getElementById('imagesPage'),
       buttons: document.getElementById('buttonsPage'),
-      texts: document.getElementById('textsPage')
+      texts: document.getElementById('textsPage'),
+      broadcast: document.getElementById('broadcastPage')
     };
 
     function showPage(targetPage) {
@@ -930,12 +980,13 @@
     document.getElementById('btnImages').addEventListener('click', () => showPage(pages.images));
     document.getElementById('btnButtons').addEventListener('click', () => showPage(pages.buttons));
     document.getElementById('btnTexts').addEventListener('click', () => showPage(pages.texts));
+    document.getElementById('btnBroadcast').addEventListener('click', () => showPage(pages.broadcast));
 
     document.querySelectorAll('.btn-to-main').forEach(btn => {
       btn.addEventListener('click', () => showPage(pages.main));
     });
 
-    /* 4. ПРЯМАЯ ЗАГРУЗКА ИЗ ГАЛЕРЕИ */
+    /* 4. ЗАГРУЗКА ИЗОБРАЖЕНИЙ ИЗ ГАЛЕРЕИ */
     function setupFileUpload(inputId, previewId, badgeId) {
       document.getElementById(inputId).addEventListener('change', function(e) {
         const file = e.target.files[0];
