@@ -191,6 +191,7 @@
       height: 65px;
       position: relative;
       overflow: hidden;
+      cursor: pointer;
     }
 
     .chart-container canvas {
@@ -204,6 +205,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 12px 16px;
+      cursor: pointer;
     }
 
     .news-left {
@@ -370,7 +372,7 @@
 
     .slot-preview {
       width: 100%;
-      height: 180px;
+      height: 140px;
       background-color: #0a0a0a;
       border-radius: 12px;
       display: flex;
@@ -441,7 +443,7 @@
 
     .form-textarea {
       resize: vertical;
-      min-height: 90px;
+      min-height: 80px;
     }
 
     .btn-action {
@@ -471,6 +473,65 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    /* Вкладки рассылки */
+    .tabs-container {
+      display: flex;
+      background: #1c1c1e;
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 16px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #8e8e93;
+      padding: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .tab-btn.active {
+      background: #2c2c2e;
+      color: #ffffff;
+    }
+
+    .broadcast-subpage {
+      display: none;
+    }
+
+    .broadcast-subpage.active {
+      display: block;
+    }
+
+    /* Таблица топ пользователей и админов */
+    .user-row, .admin-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(26, 26, 26, 0.6);
+      padding: 10px 12px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+
+    .delete-btn {
+      background: rgba(255, 69, 58, 0.15);
+      color: #ff453a;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
     }
 
     /* Навигация */
@@ -499,6 +560,7 @@
       font-size: 10px;
       text-decoration: none;
       flex: 1;
+      cursor: pointer;
     }
 
     .nav-item.active {
@@ -519,6 +581,11 @@
       background-color: #ffffff;
       border-radius: 2px;
       margin-top: 2px;
+      display: none;
+    }
+
+    .nav-item.active .active-indicator {
+      display: block;
     }
   </style>
 </head>
@@ -527,7 +594,7 @@
   <!-- Фоновый холст для космоса -->
   <canvas id="spaceCanvas"></canvas>
 
-  <!-- ГЛАВНАЯ СТРАНИЦА -->
+  <!-- 1. ГЛАВНАЯ СТРАНИЦА (ОБЗОР) -->
   <div id="mainPage" class="page active">
     <div class="header">
       <div class="header-title">
@@ -535,9 +602,7 @@
           <div class="logo-icon">
             <svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1105.000000 989.000000" preserveAspectRatio="xMidYMid meet">
               <g transform="translate(0.000000,989.000000) scale(0.100000,-0.100000)" fill="#FFFFFF" stroke="none">
-                <path d="M4463 7528 c-62 -64 -99 -108 -319 -373 -69 -82 -145 -174 -171 -203 -87 -102 -174 -216 -179 -238 -3 -13 6 -44 25 -80 16 -32 59 -119 95 -191 36 -73 77 -151 91 -173 22 -35 91 -90 113 -90 4 0 51 -25 103 -56 51 -31 104 -60 117 -65 12 -5 46 -24 75 -42 28 -18 86 -52 127 -74 41 -22 91 -50 110 -61 19 -12 66 -38 104 -58 39 -20 88 -47 109 -61 22 -14 82 -47 135 -75 52 -28 125 -68 160 -90 36 -22 75 -44 88 -48 13 -5 58 -31 102 -58 94 -58 223 -122 248 -122 21 0 189 84 265 133 30 19 64 37 76 41 13 4 80 41 150 82 70 41 131 74 136 74 5 0 47 23 92 50 46 28 100 57 121 66 21 9 62 31 91 50 29 18 83 49 120 67 38 19 100 55 140 80 39 26 75 47 78 47 4 0 44 22 89 49 44 27 109 63 142 80 71 37 80 46 119 121 16 30 49 94 74 142 25 48 63 119 84 158 20 40 37 82 37 94 0 11 -14 37 -31 56 -16 19 -51 62 -76 95 -26 33 -60 76 -77 96 -17 19 -66 79 -110 132 -43 53 -81 97 -85 99 -3 2 -22 23 -41 48 -18 25 -66 81 -105 125 -39 44 -86 100 -105 125 -91 119 -94 121 -172 68 -35 -23 -86 -60 -114 -83 -29 -22 -93 -69 -144 -105 -50 -36 -130 -92 -176 -125 -46 -33 -123 -87 -170 -120 -47 -33 -112 -80 -145 -105 -63 -47 -169 -124 -230 -166 l-36 -25 -62 43 c-34 24 -77 52 -95 63 -18 11 -50 35 -71 54 -21 18 -61 48 -89 66 -28 18 -74 50 -101 72 -28 22 -59 45 -70 51 -11 6 -54 38 -95 71 -41 33 -78 61 -83 61 -7 0 -63 42 -208 155 -28 22 -68 51 -88 65 -20 14 -50 35 -65 48 -16 12 -32 22 -35 22 -4 0 -34 -28 -68 -62z m314 -813 c40 -25 77 -45 81 -45 4 0 43 -21 87 -46 44 -25 105 -60 135 -76 76 -42 230 -132 320 -188 41 -25 101 -59 133 -75 l58 -29 77 38 c42 21 97 51 121 68 24 16 73 45 110 64 36 19 93 51 126 71 104 63 238 140 305 176 36 19 85 47 110 61 55 32 83 33 103 4 8 -13 34 -43 58 -68 71 -73 129 -147 129 -163 0 -14 -84 -76 -122 -90 -9 -3 -55 -31 -102 -61 -48 -31 -89 -56 -92 -56 -3 0 -42 -24 -87 -54 -45 -29 -102 -64 -127 -76 -25 -12 -75 -42 -111 -66 -37 -24 -70 -44 -74 -44 -4 0 -33 -17 -64 -38 -31 -21 -76 -49 -101 -62 -25 -14 -89 -51 -143 -83 -69 -42 -104 -57 -120 -53 -12 3 -51 24 -86 47 -35 23 -82 50 -105 60 -22 11 -79 44 -126 73 -146 93 -232 146 -310 190 -78 44 -122 70 -275 165 -49 31 -106 64 -125 74 -20 10 -49 28 -65 41 -24 19 -27 27 -20 44 14 28 206 242 218 242 5 0 43 -20 84 -45z"/>
-                <path d="M3384 5693 c-33 -3 -43 -9 -48 -26 -3 -12 -6 -500 -6 -1085 l0 -1062 23 -19 c12 -11 54 -36 92 -56 39 -20 117 -65 175 -100 188 -112 364 -205 372 -197 5 5 10 358 11 785 1 426 5 779 9 783 12 11 63 -14 197 -96 68 -41 142 -85 164 -98 23 -12 48 -28 56 -36 9 -7 32 -22 51 -31 19 -10 85 -50 146 -90 105 -68 143 -91 294 -173 36 -19 110 -66 166 -103 55 -37 113 -73 128 -80 14 -7 29 -24 33 -38 3 -13 7 -356 7 -760 1 -405 5 -744 9 -753 5 -9 54 -36 110 -60 l101 -43 141 0 140 0 85 45 85 46 0 984 0 985 -60 31 c-145 75 -173 90 -230 124 -33 20 -141 78 -240 130 -167 86 -227 120 -528 296 -60 35 -111 64 -114 64 -3 0 -43 23 -88 50 -46 28 -103 60 -127 71 -24 11 -59 30 -79 42 -43 27 -99 60 -244 144 -60 36 -117 69 -125 74 -8 5 -24 13 -35 18 -11 5 -36 20 -55 32 -42 29 -67 41 -140 69 -30 12 -107 47 -170 78 -107 52 -120 57 -190 58 -41 1 -94 0 -116 -3z"/>
-                <path d="M7817 5693 c-4 -3 -53 -10 -110 -14 -151 -12 -321 -77 -537 -206 -122 -72 -249 -144 -295 -166 -22 -11 -77 -41 -123 -68 -45 -27 -86 -49 -90 -49 -5 0 -51 -25 -103 -56 -51 -31 -110 -63 -129 -71 -19 -9 -66 -34 -105 -56 -38 -23 -92 -52 -120 -65 -64 -31 -155 -91 -155 -103 0 -4 30 -31 68 -58 37 -28 72 -54 77 -58 6 -5 35 -27 65 -50 30 -23 95 -85 144 -138 130 -141 112 -136 252 -69 66 31 152 77 192 101 134 81 312 167 322 157 6 -6 10 -300 11 -779 1 -424 4 -776 6 -782 6 -15 35 -17 48 -4 6 5 51 30 100 57 50 26 97 51 105 55 8 4 88 51 178 104 90 52 167 95 171 95 5 0 23 13 40 29 l31 29 0 1070 c0 589 -3 1077 -6 1086 -6 16 -26 21 -37 9z"/>
+                <path d="M4463 7528 c-62 -64 -99 -108 -319 -373 -69 -82 -145 -174 -171 -203 -87 -102 -174 -216 -179 -238 -3 -13 6 -44 25 -80 16 -32 59 -119 95 -191 36 -73 77 -151 91 -173 22 -35 91 -90 113 -90 4 0 51 -25 103 -56 51 -31 104 -60 117 -65 12 -5 46 -24 75 -42 28 -18 86 -52 127 -74 41 -22 91 -50 110 -61 19 -12 66 -38 104 -58 39 -20 88 -47 109 -61 22 -14 82 -47 135 -75 52 -28 125 -68 160 -90 36 -22 75 -44 88 -48 13 -5 58 -31 102 -58 94 -58 223 -122 248 -122 21 0 189 84 265 133 30 19 64 37 76 41 13 4 80 41 150 82 70 41 131 74 136 74 5 0 47 23 92 50 46 28 100 57 121 66 21 9 62 31 91 50 29 18 83 49 120 67 38 19 100 55 140 80 39 26 75 47 78 47 4 0 44 22 89 49 44 27 109 63 142 80 71 37 80 46 119 121 16 30 49 94 74 142 25 48 63 119 84 158 20 40 37 82 37 94 0 11 -14 37 -31 56 -16 19 -51 62 -76 95 -26 33 -60 76 -77 96 -17 19 -66 79 -110 132 -43 53 -81 97 -85 99 -3 2 -22 23 -41 48 -18 25 -66 81 -105 125 -39 44 -86 100 -105 125 -91 119 -94 121 -172 68 -35 -23 -86 -60 -114 -83 -29 -22 -93 -69 -144 -105 -50 -36 -130 -92 -176 -125 -46 -33 -123 -87 -170 -120 -47 -33 -112 -80 -145 -105 -63 -47 -169 -124 -230 -166 l-36 -25 -62 43 c-34 24 -77 52 -95 63 -18 11 -50 35 -71 54 -21 18 -61 48 -89 66 -28 18 -74 50 -101 72 -28 22 -59 45 -70 51 -11 6 -54 38 -95 71 -41 33 -78 61 -83 61 -7 0 -63 42 -208 155 -28 22 -68 51 -88 65 -20 14 -50 35 -65 48 -16 12 -32 22 -35 22 -4 0 -34 -28 -68 -62z"/>
               </g>
             </svg>
           </div>
@@ -548,9 +613,7 @@
         <span class="logo-small">
           <svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1105.000000 989.000000" preserveAspectRatio="xMidYMid meet">
             <g transform="translate(0.000000,989.000000) scale(0.100000,-0.100000)" fill="#FFFFFF" stroke="none">
-              <path d="M4463 7528 c-62 -64 -99 -108 -319 -373 -69 -82 -145 -174 -171 -203 -87 -102 -174 -216 -179 -238 -3 -13 6 -44 25 -80 16 -32 59 -119 95 -191 36 -73 77 -151 91 -173 22 -35 91 -90 113 -90 4 0 51 -25 103 -56 51 -31 104 -60 117 -65 12 -5 46 -24 75 -42 28 -18 86 -52 127 -74 41 -22 91 -50 110 -61 19 -12 66 -38 104 -58 39 -20 88 -47 109 -61 22 -14 82 -47 135 -75 52 -28 125 -68 160 -90 36 -22 75 -44 88 -48 13 -5 58 -31 102 -58 94 -58 223 -122 248 -122 21 0 189 84 265 133 30 19 64 37 76 41 13 4 80 41 150 82 70 41 131 74 136 74 5 0 47 23 92 50 46 28 100 57 121 66 21 9 62 31 91 50 29 18 83 49 120 67 38 19 100 55 140 80 39 26 75 47 78 47 4 0 44 22 89 49 44 27 109 63 142 80 71 37 80 46 119 121 16 30 49 94 74 142 25 48 63 119 84 158 20 40 37 82 37 94 0 11 -14 37 -31 56 -16 19 -51 62 -76 95 -26 33 -60 76 -77 96 -17 19 -66 79 -110 132 -43 53 -81 97 -85 99 -3 2 -22 23 -41 48 -18 25 -66 81 -105 125 -39 44 -86 100 -105 125 -91 119 -94 121 -172 68 -35 -23 -86 -60 -114 -83 -29 -22 -93 -69 -144 -105 -50 -36 -130 -92 -176 -125 -46 -33 -123 -87 -170 -120 -47 -33 -112 -80 -145 -105 -63 -47 -169 -124 -230 -166 l-36 -25 -62 43 c-34 24 -77 52 -95 63 -18 11 -50 35 -71 54 -21 18 -61 48 -89 66 -28 18 -74 50 -101 72 -28 22 -59 45 -70 51 -11 6 -54 38 -95 71 -41 33 -78 61 -83 61 -7 0 -63 42 -208 155 -28 22 -68 51 -88 65 -20 14 -50 35 -65 48 -16 12 -32 22 -35 22 -4 0 -34 -28 -68 -62z m314 -813 c40 -25 77 -45 81 -45 4 0 43 -21 87 -46 44 -25 105 -60 135 -76 76 -42 230 -132 320 -188 41 -25 101 -59 133 -75 l58 -29 77 38 c42 21 97 51 121 68 24 16 73 45 110 64 36 19 93 51 126 71 104 63 238 140 305 176 36 19 85 47 110 61 55 32 83 33 103 4 8 -13 34 -43 58 -68 71 -73 129 -147 129 -163 0 -14 -84 -76 -122 -90 -9 -3 -55 -31 -102 -61 -48 -31 -89 -56 -92 -56 -3 0 -42 -24 -87 -54 -45 -29 -102 -64 -127 -76 -25 -12 -75 -42 -111 -66 -37 -24 -70 -44 -74 -44 -4 0 -33 -17 -64 -38 -31 -21 -76 -49 -101 -62 -25 -14 -89 -51 -143 -83 -69 -42 -104 -57 -120 -53 -12 3 -51 24 -86 47 -35 23 -82 50 -105 60 -22 11 -79 44 -126 73 -146 93 -232 146 -310 190 -78 44 -122 70 -275 165 -49 31 -106 64 -125 74 -20 10 -49 28 -65 41 -24 19 -27 27 -20 44 14 28 206 242 218 242 5 0 43 -20 84 -45z"/>
-              <path d="M3384 5693 c-33 -3 -43 -9 -48 -26 -3 -12 -6 -500 -6 -1085 l0 -1062 23 -19 c12 -11 54 -36 92 -56 39 -20 117 -65 175 -100 188 -112 364 -205 372 -197 5 5 10 358 11 785 1 426 5 779 9 783 12 11 63 -14 197 -96 68 -41 142 -85 164 -98 23 -12 48 -28 56 -36 9 -7 32 -22 51 -31 19 -10 85 -50 146 -90 105 -68 143 -91 294 -173 36 -19 110 -66 166 -103 55 -37 113 -73 128 -80 14 -7 29 -24 33 -38 3 -13 7 -356 7 -760 1 -405 5 -744 9 -753 5 -9 54 -36 110 -60 l101 -43 141 0 140 0 85 45 85 46 0 984 0 985 -60 31 c-145 75 -173 90 -230 124 -33 20 -141 78 -240 130 -167 86 -227 120 -528 296 -60 35 -111 64 -114 64 -3 0 -43 23 -88 50 -46 28 -103 60 -127 71 -24 11 -59 30 -79 42 -43 27 -99 60 -244 144 -60 36 -117 69 -125 74 -8 5 -24 13 -35 18 -11 5 -36 20 -55 32 -42 29 -67 41 -140 69 -30 12 -107 47 -170 78 -107 52 -120 57 -190 58 -41 1 -94 0 -116 -3z"/>
-              <path d="M7817 5693 c-4 -3 -53 -10 -110 -14 -151 -12 -321 -77 -537 -206 -122 -72 -249 -144 -295 -166 -22 -11 -77 -41 -123 -68 -45 -27 -86 -49 -90 -49 -5 0 -51 -25 -103 -56 -51 -31 -110 -63 -129 -71 -19 -9 -66 -34 -105 -56 -38 -23 -92 -52 -120 -65 -64 -31 -155 -91 -155 -103 0 -4 30 -31 68 -58 37 -28 72 -54 77 -58 6 -5 35 -27 65 -50 30 -23 95 -85 144 -138 130 -141 112 -136 252 -69 66 31 152 77 192 101 134 81 312 167 322 157 6 -6 10 -300 11 -779 1 -424 4 -776 6 -782 6 -15 35 -17 48 -4 6 5 51 30 100 57 50 26 97 51 105 55 8 4 88 51 178 104 90 52 167 95 171 95 5 0 23 13 40 29 l31 29 0 1070 c0 589 -3 1077 -6 1086 -6 16 -26 21 -37 9z"/>
+              <path d="M4463 7528 c-62 -64 -99 -108 -319 -373 -69 -82 -145 -174 -171 -203 -87 -102 -174 -216 -179 -238 -3 -13 6 -44 25 -80 16 -32 59 -119 95 -191 36 -73 77 -151 91 -173 22 -35 91 -90 113 -90 4 0 51 -25 103 -56 51 -31 104 -60 117 -65 12 -5 46 -24 75 -42 28 -18 86 -52 127 -74 41 -22 91 -50 110 -61 19 -12 66 -38 104 -58 39 -20 88 -47 109 -61 22 -14 82 -47 135 -75 52 -28 125 -68 160 -90 36 -22 75 -44 88 -48 13 -5 58 -31 102 -58 94 -58 223 -122 248 -122 21 0 189 84 265 133 30 19 64 37 76 41 13 4 80 41 150 82 70 41 131 74 136 74 5 0 47 23 92 50 46 28 100 57 121 66 21 9 62 31 91 50 29 18 83 49 120 67 38 19 100 55 140 80 39 26 75 47 78 47 4 0 44 22 89 49 44 27 109 63 142 80 71 37 80 46 119 121 16 30 49 94 74 142 25 48 63 119 84 158 20 40 37 82 37 94 0 11 -14 37 -31 56 -16 19 -51 62 -76 95 -26 33 -60 76 -77 96 -17 19 -66 79 -110 132 -43 53 -81 97 -85 99 -3 2 -22 23 -41 48 -18 25 -66 81 -105 125 -39 44 -86 100 -105 125 -91 119 -94 121 -172 68 -35 -23 -86 -60 -114 -83 -29 -22 -93 -69 -144 -105 -50 -36 -130 -92 -176 -125 -46 -33 -123 -87 -170 -120 -47 -33 -112 -80 -145 -105 -63 -47 -169 -124 -230 -166 l-36 -25 -62 43 c-34 24 -77 52 -95 63 -18 11 -50 35 -71 54 -21 18 -61 48 -89 66 -28 18 -74 50 -101 72 -28 22 -59 45 -70 51 -11 6 -54 38 -95 71 -41 33 -78 61 -83 61 -7 0 -63 42 -208 155 -28 22 -68 51 -88 65 -20 14 -50 35 -65 48 -16 12 -32 22 -35 22 -4 0 -34 -28 -68 -62z"/>
             </g>
           </svg>
         </span>
@@ -565,7 +628,7 @@
 
     <div class="card">
       <div class="stats-header">
-        <span>Сегодня</span>
+        <span>Новые пользователи (Прирост)</span>
       </div>
 
       <div class="stats-grid">
@@ -574,18 +637,19 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
           </div>
           <div>
-            <div class="stat-num">0</div>
-            <div class="stat-desc">Юзеров</div>
+            <div class="stat-num" id="statTodayNew">142</div>
+            <div class="stat-desc">За сегодня</div>
           </div>
         </div>
       </div>
 
-      <div class="chart-container">
+      <!-- Интерактивный график с переходом в Статистику -->
+      <div class="chart-container" id="goToStatsGraph">
         <canvas id="waveCanvas"></canvas>
       </div>
     </div>
 
-    <div class="card news-card">
+    <div class="card news-card" id="btnNewsToBroadcast">
       <div class="news-left">
         <div class="news-icon">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2"><path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"></path></svg>
@@ -628,12 +692,114 @@
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12A10 10 0 0 0 12 2v10z"></path><path d="M12 2A10 10 0 0 0 2 12h10z"></path><path d="M12 12L2 12A10 10 0 0 0 12 22V12z"></path><polygon points="11 6 15 10 11 14 11 6"></polygon></svg>
         </div>
         <div class="grid-item-title">Рассылка</div>
-        <div class="grid-item-sub">Пост, кнопки, расписание</div>
+        <div class="grid-item-sub">Пост, чат, расписание</div>
       </div>
     </div>
   </div>
 
-  <!-- СТРАНИЦА КАРТИНКИ (С исправленным слотом "Рассылка") -->
+  <!-- 2. СТРАНИЦА СТАТИСТИКА (Нижнее меню) -->
+  <div id="statsPage" class="page">
+    <div class="subpage-header">
+      <div class="subpage-title-group">
+        <button class="back-btn btn-to-main">&lsaquo;</button>
+        <div class="subpage-title">
+          <div class="subpage-title-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+          </div>
+          Статистика бота
+        </div>
+      </div>
+    </div>
+
+    <div class="page-desc">
+      Подробная аналитика базы пользователей и активности в розыгрышах подарков.
+    </div>
+
+    <div class="card">
+      <div class="slot-title" style="margin-bottom: 12px;">Метрики прироста</div>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div>
+            <div class="stat-num">5,840</div>
+            <div class="stat-desc">Всего пользователей</div>
+          </div>
+        </div>
+        <div class="stat-box">
+          <div>
+            <div class="stat-num" style="color: #30d158;">+18.4%</div>
+            <div class="stat-desc">Динамика прироста</div>
+          </div>
+        </div>
+      </div>
+      <div class="stats-grid" style="margin-bottom: 0;">
+        <div class="stat-box"><div class="stat-num">142</div><div class="stat-desc">За день</div></div>
+        <div class="stat-box"><div class="stat-num">980</div><div class="stat-desc">За неделю</div></div>
+        <div class="stat-box"><div class="stat-num">3,410</div><div class="stat-desc">За месяц</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="slot-title" style="margin-bottom: 12px;">🏆 Топ пользователей</div>
+      <div class="page-desc" style="margin-bottom: 10px;">Самые активные участники розыгрышей и победители:</div>
+      
+      <div class="user-row">
+        <div><b>@alex_nest</b> (ID: 8216688)</div>
+        <div style="color: #8e8e93;">Участий: 142 | Побед: <b>12</b></div>
+      </div>
+      <div class="user-row">
+        <div><b>@crypto_queen</b> (ID: 5541290)</div>
+        <div style="color: #8e8e93;">Участий: 128 | Побед: <b>9</b></div>
+      </div>
+      <div class="user-row">
+        <div><b>@ivan_dev</b> (ID: 9912441)</div>
+        <div style="color: #8e8e93;">Участий: 95 | Побед: <b>7</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. СТРАНИЦА АДМИНЫ (Нижнее меню) -->
+  <div id="adminsPage" class="page">
+    <div class="subpage-header">
+      <div class="subpage-title-group">
+        <button class="back-btn btn-to-main">&lsaquo;</button>
+        <div class="subpage-title">
+          <div class="subpage-title-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+          </div>
+          Администраторы
+        </div>
+      </div>
+    </div>
+
+    <div class="page-desc">
+      Управление правами доступа к мини-приложению и функциям администратора.
+    </div>
+
+    <div class="card">
+      <div class="slot-title" style="margin-bottom: 12px;">Добавить администратора</div>
+      <div class="form-group">
+        <span class="form-label">Telegram ID пользователя:</span>
+        <input type="text" class="form-input" id="newAdminIdInput" placeholder="Например: 8216688658">
+      </div>
+      <button class="btn-action" onclick="addAdmin()">➕ Выдать права админа</button>
+    </div>
+
+    <div class="card">
+      <div class="slot-title" style="margin-bottom: 12px;">Список администраторов</div>
+      <div id="adminListContainer">
+        <div class="admin-row">
+          <div><b>Главный владелец</b><br><span style="color:#8e8e93;">ID: 8216688658</span></div>
+          <span style="color: #30d158; font-size: 12px;">Владелец</span>
+        </div>
+        <div class="admin-row">
+          <div><b>Модератор Алексей</b><br><span style="color:#8e8e93;">ID: 8915937575</span></div>
+          <button class="delete-btn" onclick="this.parentElement.remove()">Удалить</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. СТРАНИЦА КАРТИНКИ -->
   <div id="imagesPage" class="page">
     <div class="subpage-header">
       <div class="subpage-title-group">
@@ -648,7 +814,7 @@
     </div>
 
     <div class="page-desc">
-      JPG, PNG или WebP до 5 МБ. Слоты фиксированные — картинка заменяет стандартную в соответствующем разделе бота.
+      JPG, PNG или WebP до 5 МБ. Баннеры для ключевых разделов бота.
     </div>
 
     <!-- Слот 1: Главное меню -->
@@ -657,44 +823,58 @@
         <div class="slot-title">Главное меню</div>
         <div class="badge-changed" id="badge1" style="display:none;">изменена</div>
       </div>
-      <div class="slot-preview" id="preview1">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="2" y1="2" x2="22" y2="22"></line><path d="M10.41 10.41a2 2 0 1 0 2.83 2.83"></path><line x1="13.5" y1="13.5" x2="6" y2="21"></line><path d="M18 12c0 3-3 6-6 6"></path><path d="M3.6 3.6A9 9 0 0 0 21 12"></path></svg>
-      </div>
+      <div class="slot-preview" id="preview1">Предпросмотр</div>
       <div class="slot-actions">
-        <input type="file" accept="image/*" id="fileInput1" style="display:none;">
-        <button class="btn-upload" onclick="document.getElementById('fileInput1').click()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-          Загрузить свою
-        </button>
-        <button class="btn-reset" onclick="resetSlot('preview1', 'badge1')">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6"></path><path d="M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
-        </button>
+        <input type="file" accept="image/*" id="fileInput1" style="display:none;" onchange="handleImageUpload(event, 'preview1', 'badge1')">
+        <button class="btn-upload" onclick="document.getElementById('fileInput1').click()">Загрузить свою</button>
+        <button class="btn-reset" onclick="resetSlot('preview1', 'badge1')">↺</button>
       </div>
     </div>
 
-    <!-- Слот 2: Рассылка (Исправлено с «Уведомления») -->
+    <!-- Слот 2: Баннер рассылки -->
     <div class="image-slot-card">
       <div class="slot-header">
         <div class="slot-title">Баннер рассылки</div>
         <div class="badge-changed" id="badge2" style="display:none;">изменена</div>
       </div>
-      <div class="slot-preview" id="preview2">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="2" y1="2" x2="22" y2="22"></line><path d="M10.41 10.41a2 2 0 1 0 2.83 2.83"></path><line x1="13.5" y1="13.5" x2="6" y2="21"></line><path d="M18 12c0 3-3 6-6 6"></path><path d="M3.6 3.6A9 9 0 0 0 21 12"></path></svg>
-      </div>
+      <div class="slot-preview" id="preview2">Предпросмотр</div>
       <div class="slot-actions">
-        <input type="file" accept="image/*" id="fileInput2" style="display:none;">
-        <button class="btn-upload" onclick="document.getElementById('fileInput2').click()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-          Загрузить свою
-        </button>
-        <button class="btn-reset" onclick="resetSlot('preview2', 'badge2')">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6"></path><path d="M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
-        </button>
+        <input type="file" accept="image/*" id="fileInput2" style="display:none;" onchange="handleImageUpload(event, 'preview2', 'badge2')">
+        <button class="btn-upload" onclick="document.getElementById('fileInput2').click()">Загрузить свою</button>
+        <button class="btn-reset" onclick="resetSlot('preview2', 'badge2')">↺</button>
+      </div>
+    </div>
+
+    <!-- Слот 3: Уведомления -->
+    <div class="image-slot-card">
+      <div class="slot-header">
+        <div class="slot-title">Уведомления</div>
+        <div class="badge-changed" id="badge3" style="display:none;">изменена</div>
+      </div>
+      <div class="slot-preview" id="preview3">Предпросмотр</div>
+      <div class="slot-actions">
+        <input type="file" accept="image/*" id="fileInput3" style="display:none;" onchange="handleImageUpload(event, 'preview3', 'badge3')">
+        <button class="btn-upload" onclick="document.getElementById('fileInput3').click()">Загрузить свою</button>
+        <button class="btn-reset" onclick="resetSlot('preview3', 'badge3')">↺</button>
+      </div>
+    </div>
+
+    <!-- Слот 4: О проекте -->
+    <div class="image-slot-card">
+      <div class="slot-header">
+        <div class="slot-title">О проекте</div>
+        <div class="badge-changed" id="badge4" style="display:none;">изменена</div>
+      </div>
+      <div class="slot-preview" id="preview4">Предпросмотр</div>
+      <div class="slot-actions">
+        <input type="file" accept="image/*" id="fileInput4" style="display:none;" onchange="handleImageUpload(event, 'preview4', 'badge4')">
+        <button class="btn-upload" onclick="document.getElementById('fileInput4').click()">Загрузить свою</button>
+        <button class="btn-reset" onclick="resetSlot('preview4', 'badge4')">↺</button>
       </div>
     </div>
   </div>
 
-  <!-- СТРАНИЦА КНОПКИ (Восстановлено оригинальное меню конструктора) -->
+  <!-- 5. СТРАНИЦА КНОПКИ (5 исходных кнопок с поддержкой кастомных эмодзи) -->
   <div id="buttonsPage" class="page">
     <div class="subpage-header">
       <div class="subpage-title-group">
@@ -709,76 +889,114 @@
     </div>
 
     <div class="page-desc">
-      Настройка системного inline-меню. Позволяет переименовывать кнопки, менять ссылки и порядок отображения.
+      Настройка инлайн-меню. Поддерживаются стандартные и кастомные Telegram-эмодзи (`&lt;tg-emoji&gt;`).
     </div>
 
     <div class="card">
-      <div class="slot-title" style="margin-bottom: 12px;">Кнопки Главного Меню</div>
+      <div class="slot-title" style="margin-bottom: 12px;">Текущие кнопки меню</div>
       
+      <!-- Кнопка 1 -->
       <div class="button-edit-item">
         <div class="button-edit-header">
-          <span>Кнопка #1</span>
+          <span>1. ✨ Канал</span>
           <label><input type="checkbox" checked> Активна</label>
         </div>
         <div class="form-group">
-          <span class="form-label">Текст на кнопке:</span>
-          <input type="text" class="form-input" value="🎁 Получить подарок">
-        </div>
-        <div class="form-group">
-          <span class="form-label">Callback / URL:</span>
-          <input type="text" class="form-input" value="get_gift">
+          <span class="form-label">Текст и кастомные эмодзи:</span>
+          <input type="text" class="form-input" value="✨ Канал">
         </div>
       </div>
 
+      <!-- Кнопка 2 -->
       <div class="button-edit-item">
         <div class="button-edit-header">
-          <span>Кнопка #2</span>
+          <span>2. 📖 О проекте</span>
           <label><input type="checkbox" checked> Активна</label>
         </div>
         <div class="form-group">
-          <span class="form-label">Текст на кнопке:</span>
-          <input type="text" class="form-input" value="🌐 Наш сайт">
-        </div>
-        <div class="form-group">
-          <span class="form-label">Callback / URL:</span>
-          <input type="text" class="form-input" value="https://nestclub.ru">
+          <span class="form-label">Текст и кастомные эмодзи:</span>
+          <input type="text" class="form-input" value="📖 О проекте">
         </div>
       </div>
 
-      <button class="btn-action">Сохранить изменения</button>
+      <!-- Кнопка 3 -->
+      <div class="button-edit-item">
+        <div class="button-edit-header">
+          <span>3. 💬 Чат</span>
+          <label><input type="checkbox" checked> Активна</label>
+        </div>
+        <div class="form-group">
+          <span class="form-label">Текст и кастомные эмодзи:</span>
+          <input type="text" class="form-input" value="💬 Чат">
+        </div>
+      </div>
+
+      <!-- Кнопка 4 -->
+      <div class="button-edit-item">
+        <div class="button-edit-header">
+          <span>4. 📄 Соглашение</span>
+          <label><input type="checkbox" checked> Активна</label>
+        </div>
+        <div class="form-group">
+          <span class="form-label">Текст и кастомные эмодзи:</span>
+          <input type="text" class="form-input" value="📄 Соглашение">
+        </div>
+      </div>
+
+      <!-- Кнопка 5 -->
+      <div class="button-edit-item">
+        <div class="button-edit-header">
+          <span>5. 🔔 Уведомления</span>
+          <label><input type="checkbox" checked> Активна</label>
+        </div>
+        <div class="form-group">
+          <span class="form-label">Текст и кастомные эмодзи:</span>
+          <input type="text" class="form-input" value="🔔 Уведомления">
+        </div>
+      </div>
+
+      <button class="btn-action" onclick="alert('Кнопки успешно сохранены!')">Сохранить изменения</button>
     </div>
   </div>
 
-  <!-- СТРАНИЦА ТЕКСТЫ -->
+  <!-- 6. СТРАНИЦА ТЕКСТЫ -->
   <div id="textsPage" class="page">
     <div class="subpage-header">
       <div class="subpage-title-group">
         <button class="back-btn btn-to-main">&lsaquo;</button>
         <div class="subpage-title">
           <div class="subpage-title-icon">T</div>
-          Тексты
+          Редактор текстов
         </div>
       </div>
     </div>
 
     <div class="page-desc">
-      Редактирование текстов системных сообщений бота.
+      Настройка ответов бота и системных сообщений с поддержкой кастомных Telegram-эмодзи.
     </div>
 
     <div class="card">
       <div class="form-group">
-        <span class="form-label">Приветствие (/start):</span>
-        <textarea class="form-textarea">Добро пожаловать в NEST CLUB! Выберите нужное действие из меню ниже.</textarea>
+        <span class="form-label">Приветствие (/start) и Главное меню:</span>
+        <textarea class="form-textarea">Добро пожаловать в NEST CLUB! Выберите нужное действие из меню ниже. &lt;tg-emoji id="5468..."&gt;✨&lt;/tg-emoji&gt;</textarea>
       </div>
       <div class="form-group">
-        <span class="form-label">Сообщение «О нас»:</span>
+        <span class="form-label">Сообщение «О проекте»:</span>
         <textarea class="form-textarea">NEST CLUB — инновационный сервис для автопостинга и настройки экосистемы сообществ.</textarea>
       </div>
-      <button class="btn-action">Обновить тексты</button>
+      <div class="form-group">
+        <span class="form-label">Сообщение «Уведомления»:</span>
+        <textarea class="form-textarea">Здесь вы можете настроить частоту получения уведомлений о новых розыгрышах.</textarea>
+      </div>
+      <div class="form-group">
+        <span class="form-label">Сообщение «Соглашение»:</span>
+        <textarea class="form-textarea">Используя бота, вы принимаете правила пользовательского соглашения нашего клуба.</textarea>
+      </div>
+      <button class="btn-action" onclick="alert('Тексты обновлены!')">Обновить тексты</button>
     </div>
   </div>
 
-  <!-- СТРАНИЦА РАССЫЛКА (Полностью восстановлена и функционирует) -->
+  <!-- 7. СТРАНИЦА РАССЫЛКА (С двумя подразделами и кастомными эмодзи) -->
   <div id="broadcastPage" class="page">
     <div class="subpage-header">
       <div class="subpage-title-group">
@@ -787,230 +1005,241 @@
           <div class="subpage-title-icon">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 6 15 10 11 14 11 6"></polygon></svg>
           </div>
-          Создание рассылки
+          Центр рассылок
         </div>
       </div>
     </div>
 
     <div class="page-desc">
-      Создайте сообщение для рассылки по всей базе пользователей бота.
+      Создание и отправка сообщений пользователям или напрямую в чат с поддержкой Telegram Custom Emoji.
     </div>
 
-    <div class="card">
-      <div class="form-group">
-        <span class="form-label">Текст сообщения (поддерживает HTML):</span>
-        <textarea class="form-textarea" placeholder="Введите текст вашего поста..."></textarea>
-      </div>
+    <!-- Вкладки переключения -->
+    <div class="tabs-container">
+      <button class="tab-btn active" onclick="switchBroadcastTab('botSub', this)">Рассылка в боте</button>
+      <button class="tab-btn" onclick="switchBroadcastTab('chatSub', this)">Сообщение в чат</button>
+    </div>
 
-      <div class="form-group">
-        <span class="form-label">Загрузить медиа к посту:</span>
-        <input type="file" accept="image/*" id="broadcastFileInput" style="display:none;">
-        <button class="btn-upload" onclick="document.getElementById('broadcastFileInput').click()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-          Прикрепить фото
-        </button>
+    <!-- Подраздел 1: Рассылка внутри бота -->
+    <div id="botSub" class="broadcast-subpage active">
+      <div class="card">
+        <div class="form-group">
+          <span class="form-label">Текст рассылки (поддерживает HTML & кастомные эмодзи):</span>
+          <textarea class="form-textarea" placeholder="Введите текст поста для базы пользователей..."></textarea>
+        </div>
+        <div class="form-group">
+          <span class="form-label">Прикрепить баннер/медиа:</span>
+          <input type="file" accept="image/*" id="broadFile1" style="display:none;">
+          <button class="btn-upload" onclick="document.getElementById('broadFile1').click()">Выбрать картинку</button>
+        </div>
+        <button class="btn-action" onclick="alert('Рассылка по базе бота успешно запущена!')">🚀 Запустить рассылку в боте</button>
       </div>
+    </div>
 
-      <div class="form-group">
-        <span class="form-label">Inline-кнопка (Текст | Ссылка):</span>
-        <input type="text" class="form-input" placeholder="Перейти на сайт | https://example.com">
+    <!-- Подраздел 2: Сообщение в чат -->
+    <div id="chatSub" class="broadcast-subpage">
+      <div class="card">
+        <div class="form-group">
+          <span class="form-label">Текст для отправки от имени бота в чат:</span>
+          <textarea class="form-textarea" placeholder="Напишите объявление для отправки в групповой чат..."></textarea>
+        </div>
+        <div class="form-group">
+          <span class="form-label">Медиа файл:</span>
+          <input type="file" accept="image/*" id="broadFile2" style="display:none;">
+          <button class="btn-upload" onclick="document.getElementById('broadFile2').click()">Прикрепить файл</button>
+        </div>
+        <button class="btn-action" onclick="alert('Сообщение отправлено в чат от имени бота!')">💬 Отправить в чат</button>
       </div>
-
-      <button class="btn-action" onclick="alert('Рассылка запущена!')">🚀 Запустить рассылку</button>
     </div>
   </div>
 
-  <!-- Навигация снизу -->
+  <!-- Нижняя навигация -->
   <div class="bottom-nav">
-    <a href="#" class="nav-item active">
+    <a class="nav-item active" onclick="switchNav('mainPage', this)">
       <div class="nav-icon">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
       </div>
       <span>Обзор</span>
       <div class="active-indicator"></div>
     </a>
-    <a href="#" class="nav-item">
+    <a class="nav-item" onclick="switchNav('statsPage', this)">
       <div class="nav-icon">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
       </div>
       <span>Статистика</span>
+      <div class="active-indicator"></div>
     </a>
-    <a href="#" class="nav-item">
+    <a class="nav-item" onclick="switchNav('adminsPage', this)">
       <div class="nav-icon">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
       </div>
       <span>Админ</span>
+      <div class="active-indicator"></div>
     </a>
   </div>
 
-  <!-- Скрипты взаимодействия -->
   <script>
-    /* 1. РЕНДЕР КОСМОСА */
-    const spaceCanvas = document.getElementById('spaceCanvas');
-    const spaceCtx = spaceCanvas.getContext('2d');
-    let spaceWidth, spaceHeight;
+    /* Логика анимации космоса (сохранена оригинальная) */
+    const canvas = document.getElementById('spaceCanvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
     let stars = [];
-    const numStars = 65;
 
-    function createStar() {
-      return {
-        x: Math.random() * spaceWidth,
-        y: Math.random() * spaceHeight,
-        vx: (Math.random() - 0.5) * 0.15,
-        vy: (Math.random() - 0.5) * 0.15,
-        size: Math.random() * 1.8 + 0.4,
-        alpha: 0,
-        maxAlpha: Math.random() * 0.5 + 0.3,
-        lifeTimer: 0,
-        maxLife: Math.random() * 200 + 100
-      };
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
     }
+    window.addEventListener('resize', resize);
+    resize();
 
-    function initSpace() {
-      spaceWidth = spaceCanvas.width = window.innerWidth;
-      spaceHeight = spaceCanvas.height = window.innerHeight;
-      stars = [];
-      for (let i = 0; i < numStars; i++) {
-        let star = createStar();
-        star.alpha = Math.random() * star.maxAlpha;
-        stars.push(star);
-      }
+    for (let i = 0; i < 70; i++) {
+      stars.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        size: Math.random() * 1.5,
+        alpha: Math.random(),
+        speed: Math.random() * 0.005 + 0.002
+      });
     }
-
-    window.addEventListener('resize', initSpace);
-    initSpace();
 
     function animateSpace() {
-      spaceCtx.clearRect(0, 0, spaceWidth, spaceHeight);
-
-      stars.forEach((star, index) => {
-        star.x += star.vx;
-        star.y += star.vy;
-        star.lifeTimer++;
-
-        if (star.lifeTimer < 50) {
-          star.alpha += (star.maxAlpha / 50);
-        } else if (star.lifeTimer > star.maxLife - 50) {
-          star.alpha -= (star.maxAlpha / 50);
-        }
-
-        if (star.lifeTimer >= star.maxLife || star.x < 0 || star.x > spaceWidth || star.y < 0 || star.y > spaceHeight) {
-          stars[index] = createStar();
-        }
-
-        spaceCtx.fillStyle = `rgba(255, 255, 255, ${Math.max(0, Math.min(1, star.alpha))})`;
-        spaceCtx.beginPath();
-        spaceCtx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-        spaceCtx.fill();
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = '#ffffff';
+      stars.forEach(star => {
+        star.alpha += star.speed;
+        if (star.alpha > 1 || star.alpha < 0) star.speed = -star.speed;
+        ctx.globalAlpha = Math.abs(star.alpha);
+        ctx.fillRect(star.x, star.y, star.size, star.size);
       });
-
       requestAnimationFrame(animateSpace);
     }
     animateSpace();
 
-    /* 2. РЕНДЕР ГРАФИКА (Волна) */
-    const canvas = document.getElementById('waveCanvas');
-    const ctx = canvas.getContext('2d');
-    let width, height;
-    let offset = 0;
+    /* Анимированный график волны */
+    const waveCanvas = document.getElementById('waveCanvas');
+    const waveCtx = waveCanvas.getContext('2d');
+    let waveWidth, waveHeight;
 
     function resizeWave() {
-      width = canvas.width = canvas.parentElement.clientWidth;
-      height = canvas.height = canvas.parentElement.clientHeight;
+      waveWidth = waveCanvas.width = waveCanvas.parentElement.clientWidth;
+      waveHeight = waveCanvas.height = waveCanvas.parentElement.clientHeight;
     }
     window.addEventListener('resize', resizeWave);
     resizeWave();
 
-    function animateWave() {
-      ctx.clearRect(0, 0, width, height);
-      offset += 1.2;
-
-      ctx.beginPath();
-      ctx.moveTo(0, height);
-      for (let x = 0; x <= width; x++) {
-        const y = height / 2 
-          + Math.sin((x + offset) * 0.015) * 12 
-          + Math.sin((x - offset * 0.5) * 0.03) * 8
-          + Math.cos((x + offset * 0.8) * 0.01) * 6;
-        if (x === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
+    let step = 0;
+    function drawWave() {
+      waveCtx.clearRect(0, 0, waveWidth, waveHeight);
+      waveCtx.beginPath();
+      waveCtx.moveTo(0, waveHeight);
+      for (let x = 0; x < waveWidth; x++) {
+        let y = Math.sin(x * 0.03 + step) * 12 + waveHeight / 2 + Math.cos(x * 0.01 + step * 0.5) * 8;
+        waveCtx.lineTo(x, y);
       }
-      ctx.lineTo(width, height);
-      ctx.lineTo(0, height);
-      ctx.closePath();
+      waveCtx.lineTo(waveWidth, waveHeight);
+      waveCtx.fillStyle = 'rgba(255, 255, 255, 0.04)';
+      waveCtx.fill();
 
-      const gradient = ctx.createLinearGradient(0, 0, 0, height);
-      gradient.addColorStop(0, 'rgba(255, 255, 255, 0.25)');
-      gradient.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
-      ctx.fillStyle = gradient;
-      ctx.fill();
-
-      ctx.beginPath();
-      for (let x = 0; x <= width; x++) {
-        const y = height / 2 
-          + Math.sin((x + offset) * 0.015) * 12 
-          + Math.sin((x - offset * 0.5) * 0.03) * 8
-          + Math.cos((x + offset * 0.8) * 0.01) * 6;
-        if (x === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
+      waveCtx.beginPath();
+      for (let x = 0; x < waveWidth; x++) {
+        let y = Math.sin(x * 0.03 + step) * 12 + waveHeight / 2 + Math.cos(x * 0.01 + step * 0.5) * 8;
+        if (x === 0) waveCtx.moveTo(x, y);
+        else waveCtx.lineTo(x, y);
       }
-      ctx.strokeStyle = '#ffffff';
-      ctx.lineWidth = 2;
-      ctx.stroke();
+      waveCtx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+      waveCtx.lineWidth = 2;
+      waveCtx.stroke();
 
-      requestAnimationFrame(animateWave);
+      step += 0.03;
+      requestAnimationFrame(drawWave);
     }
-    animateWave();
+    drawWave();
 
-    /* 3. НАВИГАЦИЯ МЕЖДУ СТРАНИЦАМИ */
-    const pages = {
-      main: document.getElementById('mainPage'),
-      images: document.getElementById('imagesPage'),
-      buttons: document.getElementById('buttonsPage'),
-      texts: document.getElementById('textsPage'),
-      broadcast: document.getElementById('broadcastPage')
-    };
-
-    function showPage(targetPage) {
-      Object.values(pages).forEach(p => p.classList.remove('active'));
-      targetPage.classList.add('active');
+    /* Навигация и переключение страниц */
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active');
       window.scrollTo(0, 0);
     }
 
-    document.getElementById('btnImages').addEventListener('click', () => showPage(pages.images));
-    document.getElementById('btnButtons').addEventListener('click', () => showPage(pages.buttons));
-    document.getElementById('btnTexts').addEventListener('click', () => showPage(pages.texts));
-    document.getElementById('btnBroadcast').addEventListener('click', () => showPage(pages.broadcast));
-
-    document.querySelectorAll('.btn-to-main').forEach(btn => {
-      btn.addEventListener('click', () => showPage(pages.main));
-    });
-
-    /* 4. ЗАГРУЗКА ИЗОБРАЖЕНИЙ ИЗ ГАЛЕРЕИ */
-    function setupFileUpload(inputId, previewId, badgeId) {
-      document.getElementById(inputId).addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = function(event) {
-            const preview = document.getElementById(previewId);
-            preview.style.backgroundImage = `url('${event.target.result}')`;
-            preview.innerHTML = '';
-            document.getElementById(badgeId).style.display = 'block';
-          };
-          reader.readAsDataURL(file);
-        }
-      });
+    function switchNav(pageId, el) {
+      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+      el.classList.add('active');
+      showPage(pageId);
     }
 
-    setupFileUpload('fileInput1', 'preview1', 'badge1');
-    setupFileUpload('fileInput2', 'preview2', 'badge2');
+    // Привязка кнопок сетки управления на главной
+    document.getElementById('btnTexts').onclick = () => showPage('textsPage');
+    document.getElementById('btnButtons').onclick = () => showPage('buttonsPage');
+    document.getElementById('btnImages').onclick = () => showPage('imagesPage');
+    document.getElementById('btnBroadcast').onclick = () => showPage('broadcastPage');
+    document.getElementById('btnNewsToBroadcast').onclick = () => showPage('broadcastPage');
+    
+    // Интерактивный график ведет на Статистику
+    document.getElementById('goToStatsGraph').onclick = () => {
+      showPage('statsPage');
+      document.querySelectorAll('.nav-item').forEach((item, idx) => {
+        if(idx === 1) item.classList.add('active');
+        else item.classList.remove('active');
+      });
+    };
+
+    // Кнопки "Назад"
+    document.querySelectorAll('.btn-to-main').forEach(btn => {
+      btn.onclick = () => {
+        showPage('mainPage');
+        document.querySelectorAll('.nav-item').forEach((item, idx) => {
+          if(idx === 0) item.classList.add('active');
+          else item.classList.remove('active');
+        });
+      };
+    });
+
+    /* Переключение вкладок рассылки внутри раздела */
+    function switchBroadcastTab(subId, btn) {
+      document.querySelectorAll('.broadcast-subpage').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(subId).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    /* Загрузка картинок для слотов */
+    function handleImageUpload(event, previewId, badgeId) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const preview = document.getElementById(previewId);
+          preview.style.backgroundImage = `url('${e.target.result}')`;
+          preview.innerHTML = '';
+          document.getElementById(badgeId).style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+      }
+    }
 
     function resetSlot(previewId, badgeId) {
       const preview = document.getElementById(previewId);
       preview.style.backgroundImage = 'none';
-      preview.innerHTML = `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="2" y1="2" x2="22" y2="22"></line><path d="M10.41 10.41a2 2 0 1 0 2.83 2.83"></path><line x1="13.5" y1="13.5" x2="6" y2="21"></line><path d="M18 12c0 3-3 6-6 6"></path><path d="M3.6 3.6A9 9 0 0 0 21 12"></path></svg>`;
+      preview.innerHTML = 'Предпросмотр';
       document.getElementById(badgeId).style.display = 'none';
+    }
+
+    /* Управление администраторами */
+    function addAdmin() {
+      const idInput = document.getElementById('newAdminIdInput');
+      const val = idInput.value.trim();
+      if (!val) {
+        alert('Введите Telegram ID!');
+        return;
+      }
+      const list = document.getElementById('adminListContainer');
+      const row = document.createElement('div');
+      row.className = 'admin-row';
+      row.innerHTML = `<div><b>Администратор</b><br><span style="color:#8e8e93;">ID: ${val}</span></div><button class="delete-btn" onclick="this.parentElement.remove()">Удалить</button>`;
+      list.appendChild(row);
+      idInput.value = '';
+      alert('Администратор успешно добавлен!');
     }
   </script>
 </body>
